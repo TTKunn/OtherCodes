@@ -1,0 +1,41 @@
+{
+  "modulePathMap": {
+    "entry": "E:\\Code\\practice\\Harmony\\PageAndData04\\04_Complete\\entry"
+  },
+  "compileMode": "esmodule",
+  "projectRootPath": "E:\\Code\\practice\\Harmony\\PageAndData04\\04_Complete",
+  "nodeModulesPath": "E:\\Code\\practice\\Harmony\\PageAndData04\\04_Complete\\entry\\build\\default\\intermediates\\loader_out\\default\\node_modules",
+  "byteCodeHarInfo": {},
+  "declarationEntry": [],
+  "moduleName": "entry",
+  "hspNameOhmMap": {},
+  "harNameOhmMap": {},
+  "packageManagerType": "ohpm",
+  "compileEntry": [
+    "E:\\Code\\practice\\Harmony\\PageAndData04\\04_Complete\\entry\\src\\main\\ets\\pages\\MainPage.ets",
+    "E:\\Code\\practice\\Harmony\\PageAndData04\\04_Complete\\entry\\src\\main\\ets\\pages\\GoalPage.ets"
+  ],
+  "otherCompileFiles": [],
+  "dynamicImportLibInfo": {},
+  "routerMap": [
+    {
+      "ohmurl": "@bundle:com.example.pageanddata/entry/ets/pages/MainPage",
+      "name": "MainPage",
+      "pageSourceFile": "E:\\Code\\practice\\Harmony\\PageAndData04\\04_Complete\\entry\\src\\main\\ets\\pages\\MainPage.ets",
+      "buildFunction": "MainPageBuilder"
+    },
+    {
+      "ohmurl": "@bundle:com.example.pageanddata/entry/ets/pages/GoalPage",
+      "name": "GoalPage",
+      "pageSourceFile": "E:\\Code\\practice\\Harmony\\PageAndData04\\04_Complete\\entry\\src\\main\\ets\\pages\\GoalPage.ets",
+      "buildFunction": "GoalPageBuilder"
+    }
+  ],
+  "hspResourcesMap": {},
+  "updateVersionInfo": {},
+  "anBuildOutPut": "E:\\Code\\practice\\Harmony\\PageAndData04\\04_Complete\\entry\\build\\default\\intermediates\\loader_out\\default\\an\\arm64-v8a",
+  "anBuildMode": "type",
+  "patchConfig": {
+    "changedFileList": "E:\\Code\\practice\\Harmony\\PageAndData04\\04_Complete\\entry\\build\\default\\intermediates\\patch\\default\\changedFileList.json"
+  }
+}

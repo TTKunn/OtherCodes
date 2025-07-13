@@ -1,0 +1,31 @@
+// 所有功能的通用常量
+export default class CommonConstants {
+  // 创建运动表的SQL语句
+  static readonly CREATE_SPORTS_TABLE_SQL: string =
+    'CREATE TABLE IF NOT EXISTS SPORTS (ID INTEGER PRIMARY KEY AUTOINCREMENT, NAME TEXT ' +
+      'NOT NULL, TYPE TEXT NOT NULL)';
+
+  // 创建计划表的SQL语句
+  static readonly CREATE_PLANS_TABLE_SQL: string =
+    'CREATE TABLE IF NOT EXISTS PLANS (ID INTEGER PRIMARY KEY AUTOINCREMENT, SPORT_ID INTEGER ' +
+      'NOT NULL, DURATION INTEGER NOT NULL, STATUS TEXT NOT NULL)';
+
+  // 查询所有持续时间的SQL语句
+  static readonly QUERY_ALL_DURATIONS_SQL: string =
+    'SELECT DISTINCT DURATION FROM PLANS';
+
+  // 查询所有计划的SQL语句
+  static readonly QUERY_ALL_PLANS_SQL: string =
+    'SELECT p.id AS ID,s.NAME AS NAME,s.type AS TYPE,p.DURATION AS DURATION,p.STATUS AS STATUS FROM SPORTS AS s ' +
+      'JOIN PLANS AS p WHERE s.ID = P.SPORT_ID';
+
+  // 按持续时间查询计划的SQL语句
+  static readonly QUERY_PLANS_BY_DURATION_SQL: string =
+    'SELECT p.id AS ID,s.NAME AS NAME,s.type AS TYPE,p.DURATION AS DURATION,p.STATUS AS STATUS FROM SPORTS AS s' +
+      ' JOIN PLANS AS p WHERE s.ID = P.SPORT_ID AND p.DURATION = ';
+
+  // 按状态查询计划的SQL语句
+  static readonly QUERY_PLANS_BY_STATUS_SQL: string =
+    'SELECT p.id AS ID,s.NAME AS NAME,s.type AS TYPE,p.DURATION AS DURATION,p.STATUS AS STATUS FROM SPORTS AS s' +
+      ' JOIN PLANS AS p WHERE s.ID = P.SPORT_ID AND p.STATUS = "';
+}

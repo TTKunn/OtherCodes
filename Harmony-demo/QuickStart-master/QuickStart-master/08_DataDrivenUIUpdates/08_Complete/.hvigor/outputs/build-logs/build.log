@@ -1,0 +1,600 @@
+[2025-07-10T09:21:32.578] [DEBUG] debug-file - env: nodejsVersion=v18.20.1
+[2025-07-10T09:21:33.713] [DEBUG] debug-file - Hvigor init with startParameters:{
+  hvigorfileTypeCheck: false,
+  parallelExecution: true,
+  incrementalExecution: true,
+  printStackTrace: false,
+  daemon: false,
+  analyze: 0,
+  logLevel: Level { level: 20000, levelStr: 'INFO', colour: 'green' }
+}
+[2025-07-10T09:21:33.764] [DEBUG] debug-file - hvigorfile, resolving E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\hvigorfile.ts
+[2025-07-10T09:21:37.780] [DEBUG] debug-file - hvigorfile, require result:  { default: { system: [Function: appTasks], plugins: [] } }
+[2025-07-10T09:21:38.087] [DEBUG] debug-file - Start initialize project's product build option map with build mode debug.
+[2025-07-10T09:21:38.141] [DEBUG] debug-file - Local scan or download HarmonyOS sdk components toolchains,ets,js,native,previewer
+[2025-07-10T09:21:38.097] [DEBUG] debug-file - Product 'default' using build option: {
+  "debuggable": true
+} in this build.
+[2025-07-10T09:21:38.151] [DEBUG] debug-file - Local scan or download hmscore sdk components toolchains,ets,native
+[2025-07-10T09:21:38.171] [DEBUG] debug-file - Start recording SDK configuration permission data.
+[2025-07-10T09:21:38.221] [DEBUG] debug-file - Sdk init in 87 ms 
+[2025-07-10T09:21:38.287] [DEBUG] debug-file - Project task initialization takes 63 ms 
+[2025-07-10T09:21:38.309] [DEBUG] debug-file - hvigorfile, resolving E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\products\default\hvigorfile.ts
+[2025-07-10T09:21:38.351] [DEBUG] debug-file - Start initialize module-target build option map, moduleName=default, buildMode=debug
+[2025-07-10T09:21:38.366] [DEBUG] debug-file - Module default task initialization takes 6 ms 
+[2025-07-10T09:21:38.469] [DEBUG] debug-file - Start initialize module-target build option map, moduleName=map, buildMode=debug
+[2025-07-10T09:21:38.476] [DEBUG] debug-file - Module map task initialization takes 2 ms 
+[2025-07-10T09:21:38.387] [DEBUG] debug-file - hvigorfile, resolving E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\features\map\hvigorfile.ts
+[2025-07-10T09:21:38.497] [DEBUG] debug-file - hvigorfile, resolving E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\features\learning\hvigorfile.ts
+[2025-07-10T09:21:38.522] [DEBUG] debug-file - Start initialize module-target build option map, moduleName=learning, buildMode=debug
+[2025-07-10T09:21:38.534] [DEBUG] debug-file - Module learning task initialization takes 1 ms 
+[2025-07-10T09:21:38.557] [DEBUG] debug-file - hvigorfile, resolving E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\features\quickstart\hvigorfile.ts
+[2025-07-10T09:21:38.584] [DEBUG] debug-file - Start initialize module-target build option map, moduleName=quickstart, buildMode=debug
+[2025-07-10T09:21:38.589] [DEBUG] debug-file - Module quickstart task initialization takes 1 ms 
+[2025-07-10T09:21:38.609] [DEBUG] debug-file - hvigorfile, resolving E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\commons\utils\hvigorfile.ts
+[2025-07-10T09:21:38.629] [DEBUG] debug-file - Start initialize module-target build option map, moduleName=utils, buildMode=debug
+[2025-07-10T09:21:38.636] [DEBUG] debug-file - Module utils task initialization takes 2 ms 
+[2025-07-10T09:21:38.661] [DEBUG] debug-file - hvigorfile, resolving E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\commons\uicomponents\hvigorfile.ts
+[2025-07-10T09:21:38.686] [DEBUG] debug-file - Start initialize module-target build option map, moduleName=uicomponents, buildMode=debug
+[2025-07-10T09:21:38.701] [DEBUG] debug-file - project has submodules:default,map,learning,quickstart,utils,uicomponents
+[2025-07-10T09:21:38.694] [DEBUG] debug-file - Module uicomponents task initialization takes 1 ms 
+[2025-07-10T09:21:38.862] [DEBUG] debug-file - default : clean cost memory 0.24554443359375
+[2025-07-10T09:21:38.848] [DEBUG] debug-file - Configuration task cost before running: 5 s 223 ms 
+[2025-07-10T09:21:38.856] [DEBUG] debug-file - Executing task :default:clean
+[2025-07-10T09:21:38.872] [DEBUG] debug-file - Executing task :map:clean
+[2025-07-10T09:21:38.877] [DEBUG] debug-file - map : clean cost memory 0.2414093017578125
+[2025-07-10T09:21:38.883] [DEBUG] debug-file - Executing task :learning:clean
+[2025-07-10T09:21:38.891] [DEBUG] debug-file - learning : clean cost memory 0.33055877685546875
+[2025-07-10T09:21:38.901] [DEBUG] debug-file - Executing task :quickstart:clean
+[2025-07-10T09:21:38.908] [DEBUG] debug-file - quickstart : clean cost memory 0.24167633056640625
+[2025-07-10T09:21:38.916] [DEBUG] debug-file - Executing task :utils:clean
+[2025-07-10T09:21:38.923] [DEBUG] debug-file - utils : clean cost memory 0.42229461669921875
+[2025-07-10T09:21:38.933] [DEBUG] debug-file - Executing task :uicomponents:clean
+[2025-07-10T09:21:38.941] [DEBUG] debug-file - uicomponents : clean cost memory 0.24166107177734375
+[2025-07-10T09:21:38.984] [DEBUG] debug-file - Module 'default' target 'default' using build option: {
+  "debuggable": true,
+  "copyFrom": "default",
+  "name": "debug"
+} in this build.
+[2025-07-10T09:21:32.582] [DEBUG] debug-file - env: hvigor-config.json5 content = {
+  modelVersion: '5.0.5',
+  dependencies: {},
+  execution: {},
+  logging: {},
+  debugging: {},
+  nodeOptions: {}
+}
+[2025-07-10T09:21:33.717] [DEBUG] debug-file - Since current hvigor version 5.18.4 differs from last hvigor version 
+      undefined, delete file-cache.json and task-cache.json.
+[2025-07-10T09:21:39.125] [DEBUG] debug-file - Create  resident worker with id: 0.
+[2025-07-10T09:21:37.781] [DEBUG] debug-file - hvigorfile, binding system plugins [Function: appTasks]
+[2025-07-10T09:21:38.088] [DEBUG] debug-file - Picking option from product 'default' with build mode 'debug'.
+[2025-07-10T09:21:38.100] [DEBUG] debug-file - not found resModel json file in : E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\products\default\src\ohosTest\module.json5
+[2025-07-10T09:21:38.288] [DEBUG] debug-file - hvigorfile, binding custom plugins []
+[2025-07-10T09:21:38.322] [DEBUG] debug-file - hvigorfile, require result:  { default: { system: [Function: hapTasks], plugins: [] } }
+[2025-07-10T09:21:38.351] [DEBUG] debug-file - Target 'default' config: {}
+[2025-07-10T09:21:38.366] [DEBUG] debug-file - hvigorfile, binding custom plugins []
+[2025-07-10T09:21:38.469] [DEBUG] debug-file - Target 'default' config: {}
+[2025-07-10T09:21:38.477] [DEBUG] debug-file - hvigorfile, binding custom plugins []
+[2025-07-10T09:21:38.394] [DEBUG] debug-file - hvigorfile, require result:  { default: { system: [Function: harTasks], plugins: [] } }
+[2025-07-10T09:21:38.505] [DEBUG] debug-file - hvigorfile, require result:  { default: { system: [Function: harTasks], plugins: [] } }
+[2025-07-10T09:21:38.522] [DEBUG] debug-file - Target 'default' config: {}
+[2025-07-10T09:21:38.534] [DEBUG] debug-file - hvigorfile, binding custom plugins []
+[2025-07-10T09:21:38.568] [DEBUG] debug-file - hvigorfile, require result:  { default: { system: [Function: harTasks], plugins: [] } }
+[2025-07-10T09:21:38.584] [DEBUG] debug-file - Target 'default' config: {}
+[2025-07-10T09:21:38.590] [DEBUG] debug-file - hvigorfile, binding custom plugins []
+[2025-07-10T09:21:38.616] [DEBUG] debug-file - hvigorfile, require result:  { default: { system: [Function: harTasks], plugins: [] } }
+[2025-07-10T09:21:38.629] [DEBUG] debug-file - Target 'default' config: {}
+[2025-07-10T09:21:38.637] [DEBUG] debug-file - hvigorfile, binding custom plugins []
+[2025-07-10T09:21:38.670] [DEBUG] debug-file - hvigorfile, require result:  { default: { system: [Function: harTasks], plugins: [] } }
+[2025-07-10T09:21:38.686] [DEBUG] debug-file - Target 'default' config: {}
+[2025-07-10T09:21:38.701] [DEBUG] debug-file - module:map no need to execute packageHap
+[2025-07-10T09:21:38.862] [DEBUG] debug-file - runTaskFromQueue task cost before running: 5 s 237 ms 
+[2025-07-10T09:21:38.694] [DEBUG] debug-file - hvigorfile, binding custom plugins []
+[2025-07-10T09:21:38.856] [DEBUG] debug-file - clean: Worker pool is inactive.
+[2025-07-10T09:21:38.872] [DEBUG] debug-file - clean: Worker pool is inactive.
+[2025-07-10T09:21:38.877] [DEBUG] debug-file - runTaskFromQueue task cost before running: 5 s 252 ms 
+[2025-07-10T09:21:38.883] [DEBUG] debug-file - clean: Worker pool is inactive.
+[2025-07-10T09:21:38.891] [DEBUG] debug-file - runTaskFromQueue task cost before running: 5 s 266 ms 
+[2025-07-10T09:21:38.901] [DEBUG] debug-file - clean: Worker pool is inactive.
+[2025-07-10T09:21:38.908] [DEBUG] debug-file - runTaskFromQueue task cost before running: 5 s 283 ms 
+[2025-07-10T09:21:38.916] [DEBUG] debug-file - clean: Worker pool is inactive.
+[2025-07-10T09:21:38.923] [DEBUG] debug-file - runTaskFromQueue task cost before running: 5 s 299 ms 
+[2025-07-10T09:21:38.933] [DEBUG] debug-file - clean: Worker pool is inactive.
+[2025-07-10T09:21:38.941] [DEBUG] debug-file - runTaskFromQueue task cost before running: 5 s 317 ms 
+[2025-07-10T09:21:38.993] [DEBUG] debug-file - Module 'default' target 'ohosTest' using build option: {
+  "debuggable": true,
+  "name": "default"
+} in this build.
+[2025-07-10T09:21:32.585] [DEBUG] debug-file - env: daemon=false
+[2025-07-10T09:21:33.718] [DEBUG] debug-file - Cache service initialization finished in 4 ms 
+[2025-07-10T09:21:39.128] [DEBUG] debug-file - Create  resident worker with id: 1.
+[2025-07-10T09:21:38.088] [DEBUG] debug-file - Product 'default' build option: {}
+[2025-07-10T09:21:38.112] [DEBUG] debug-file - not found resModel json file in : E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\features\map\src\ohosTest\module.json5
+[2025-07-10T09:21:38.288] [DEBUG] debug-file - hvigorfile, no custom plugins were found in E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\hvigorfile.ts
+[2025-07-10T09:21:38.322] [DEBUG] debug-file - hvigorfile, binding system plugins [Function: hapTasks]
+[2025-07-10T09:21:38.352] [DEBUG] debug-file - Target 'ohosTest' config: {}
+[2025-07-10T09:21:38.366] [DEBUG] debug-file - hvigorfile, no custom plugins were found in E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\products\default\hvigorfile.ts
+[2025-07-10T09:21:38.469] [DEBUG] debug-file - Target 'ohosTest' config: {}
+[2025-07-10T09:21:38.477] [DEBUG] debug-file - hvigorfile, no custom plugins were found in E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\features\map\hvigorfile.ts
+[2025-07-10T09:21:38.395] [DEBUG] debug-file - hvigorfile, binding system plugins [Function: harTasks]
+[2025-07-10T09:21:38.505] [DEBUG] debug-file - hvigorfile, binding system plugins [Function: harTasks]
+[2025-07-10T09:21:38.523] [DEBUG] debug-file - Target 'ohosTest' config: {}
+[2025-07-10T09:21:38.534] [DEBUG] debug-file - hvigorfile, no custom plugins were found in E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\features\learning\hvigorfile.ts
+[2025-07-10T09:21:38.568] [DEBUG] debug-file - hvigorfile, binding system plugins [Function: harTasks]
+[2025-07-10T09:21:38.584] [DEBUG] debug-file - Target 'ohosTest' config: {}
+[2025-07-10T09:21:38.590] [DEBUG] debug-file - hvigorfile, no custom plugins were found in E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\features\quickstart\hvigorfile.ts
+[2025-07-10T09:21:38.616] [DEBUG] debug-file - hvigorfile, binding system plugins [Function: harTasks]
+[2025-07-10T09:21:38.629] [DEBUG] debug-file - Target 'ohosTest' config: {}
+[2025-07-10T09:21:38.637] [DEBUG] debug-file - hvigorfile, no custom plugins were found in E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\commons\utils\hvigorfile.ts
+[2025-07-10T09:21:38.670] [DEBUG] debug-file - hvigorfile, binding system plugins [Function: harTasks]
+[2025-07-10T09:21:38.686] [DEBUG] debug-file - Target 'ohosTest' config: {}
+[2025-07-10T09:21:38.701] [DEBUG] debug-file - module:learning no need to execute packageHap
+[2025-07-10T09:21:38.863] [INFO] debug-file - Finished :default:clean... after 7 ms 
+[2025-07-10T09:21:38.694] [DEBUG] debug-file - hvigorfile, no custom plugins were found in E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\commons\uicomponents\hvigorfile.ts
+[2025-07-10T09:21:38.878] [INFO] debug-file - Finished :map:clean... after 6 ms 
+[2025-07-10T09:21:38.892] [INFO] debug-file - Finished :learning:clean... after 9 ms 
+[2025-07-10T09:21:38.909] [INFO] debug-file - Finished :quickstart:clean... after 8 ms 
+[2025-07-10T09:21:38.924] [INFO] debug-file - Finished :utils:clean... after 8 ms 
+[2025-07-10T09:21:38.942] [INFO] debug-file - Finished :uicomponents:clean... after 9 ms 
+[2025-07-10T09:21:39.005] [DEBUG] debug-file - Module 'map' target 'default' using build option: {
+  "debuggable": true,
+  "copyFrom": "default",
+  "name": "debug"
+} in this build.
+[2025-07-10T09:21:32.585] [DEBUG] debug-file - no-daemon, use the parent process.execArgv --max-old-space-size=8192,--max-semi-space-size=16,--expose-gc
+[2025-07-10T09:21:39.133] [DEBUG] debug-file - Current worker pool is stopped or closed.
+[2025-07-10T09:21:38.088] [DEBUG] debug-file - End initialize project's product build option map with build mode 'debug'.
+[2025-07-10T09:21:38.115] [DEBUG] debug-file - not found resModel json file in : E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\features\learning\src\ohosTest\module.json5
+[2025-07-10T09:21:38.288] [DEBUG] debug-file - hvigorfile, resolve finished E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\hvigorfile.ts
+[2025-07-10T09:21:38.352] [DEBUG] debug-file - Module 'default' target 'default' build option: {
+  "debuggable": true,
+  "copyFrom": "default",
+  "name": "debug"
+}
+[2025-07-10T09:21:38.366] [DEBUG] debug-file - hvigorfile, resolve finished E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\products\default\hvigorfile.ts
+[2025-07-10T09:21:38.469] [DEBUG] debug-file - Module 'map' target 'default' build option: {
+  "debuggable": true,
+  "copyFrom": "default",
+  "name": "debug"
+}
+[2025-07-10T09:21:38.477] [DEBUG] debug-file - hvigorfile, resolve finished E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\features\map\hvigorfile.ts
+[2025-07-10T09:21:38.523] [DEBUG] debug-file - Module 'learning' target 'default' build option: {
+  "debuggable": true,
+  "copyFrom": "default",
+  "name": "debug"
+}
+[2025-07-10T09:21:38.534] [DEBUG] debug-file - hvigorfile, resolve finished E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\features\learning\hvigorfile.ts
+[2025-07-10T09:21:38.584] [DEBUG] debug-file - Module 'quickstart' target 'default' build option: {
+  "debuggable": true,
+  "copyFrom": "default",
+  "name": "debug"
+}
+[2025-07-10T09:21:38.590] [DEBUG] debug-file - hvigorfile, resolve finished E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\features\quickstart\hvigorfile.ts
+[2025-07-10T09:21:38.629] [DEBUG] debug-file - Module 'utils' target 'default' build option: {
+  "debuggable": true,
+  "copyFrom": "default",
+  "name": "debug"
+}
+[2025-07-10T09:21:38.637] [DEBUG] debug-file - hvigorfile, resolve finished E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\commons\utils\hvigorfile.ts
+[2025-07-10T09:21:38.686] [DEBUG] debug-file - Module 'uicomponents' target 'default' build option: {
+  "debuggable": true,
+  "copyFrom": "default",
+  "name": "debug"
+}
+[2025-07-10T09:21:38.701] [DEBUG] debug-file - module:quickstart no need to execute packageHap
+[2025-07-10T09:21:38.694] [DEBUG] debug-file - hvigorfile, resolve finished E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\commons\uicomponents\hvigorfile.ts
+[2025-07-10T09:21:38.942] [DEBUG] debug-file - Executing task ::clean
+[2025-07-10T09:21:39.016] [DEBUG] debug-file - Module 'map' target 'ohosTest' using build option: {
+  "debuggable": true,
+  "name": "default"
+} in this build.
+[2025-07-10T09:21:39.133] [DEBUG] debug-file - Clear worker 0.
+[2025-07-10T09:21:38.119] [DEBUG] debug-file - not found resModel json file in : E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\features\quickstart\src\ohosTest\module.json5
+[2025-07-10T09:21:38.352] [DEBUG] debug-file - Module 'default' target 'ohosTest' build option: {
+  "debuggable": true,
+  "name": "default"
+}
+[2025-07-10T09:21:38.469] [DEBUG] debug-file - Module 'map' target 'ohosTest' build option: {
+  "debuggable": true,
+  "name": "default"
+}
+[2025-07-10T09:21:38.523] [DEBUG] debug-file - Module 'learning' target 'ohosTest' build option: {
+  "debuggable": true,
+  "name": "default"
+}
+[2025-07-10T09:21:38.584] [DEBUG] debug-file - Module 'quickstart' target 'ohosTest' build option: {
+  "debuggable": true,
+  "name": "default"
+}
+[2025-07-10T09:21:38.629] [DEBUG] debug-file - Module 'utils' target 'ohosTest' build option: {
+  "debuggable": true,
+  "name": "default"
+}
+[2025-07-10T09:21:38.686] [DEBUG] debug-file - Module 'uicomponents' target 'ohosTest' build option: {
+  "debuggable": true,
+  "name": "default"
+}
+[2025-07-10T09:21:38.701] [DEBUG] debug-file - module:utils no need to execute packageHap
+[2025-07-10T09:21:38.942] [DEBUG] debug-file - clean: Worker pool is inactive.
+[2025-07-10T09:21:39.029] [DEBUG] debug-file - Module 'learning' target 'default' using build option: {
+  "debuggable": true,
+  "copyFrom": "default",
+  "name": "debug"
+} in this build.
+[2025-07-10T09:21:39.134] [DEBUG] debug-file - Worker 0 has been cleared.
+[2025-07-10T09:21:38.122] [DEBUG] debug-file - not found resModel json file in : E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\commons\utils\src\ohosTest\module.json5
+[2025-07-10T09:21:38.352] [DEBUG] debug-file - End initialize module-target build option map, moduleName=default
+[2025-07-10T09:21:38.469] [DEBUG] debug-file - End initialize module-target build option map, moduleName=map
+[2025-07-10T09:21:38.523] [DEBUG] debug-file - End initialize module-target build option map, moduleName=learning
+[2025-07-10T09:21:38.584] [DEBUG] debug-file - End initialize module-target build option map, moduleName=quickstart
+[2025-07-10T09:21:38.629] [DEBUG] debug-file - End initialize module-target build option map, moduleName=utils
+[2025-07-10T09:21:38.686] [DEBUG] debug-file - End initialize module-target build option map, moduleName=uicomponents
+[2025-07-10T09:21:38.701] [DEBUG] debug-file - module:uicomponents no need to execute packageHap
+[2025-07-10T09:21:38.944] [DEBUG] debug-file - 08_Complete : clean cost memory 0.03253173828125
+[2025-07-10T09:21:39.037] [DEBUG] debug-file - Module 'learning' target 'ohosTest' using build option: {
+  "debuggable": true,
+  "name": "default"
+} in this build.
+[2025-07-10T09:21:39.134] [DEBUG] debug-file - Current idle worker size: 1.
+[2025-07-10T09:21:38.126] [DEBUG] debug-file - not found resModel json file in : E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\commons\uicomponents\src\ohosTest\module.json5
+[2025-07-10T09:21:38.352] [DEBUG] debug-file - Start initialize module-target build option map, moduleName=default, buildMode=release
+[2025-07-10T09:21:38.469] [DEBUG] debug-file - Start initialize module-target build option map, moduleName=map, buildMode=release
+[2025-07-10T09:21:38.584] [DEBUG] debug-file - Start initialize module-target build option map, moduleName=quickstart, buildMode=release
+[2025-07-10T09:21:38.523] [DEBUG] debug-file - Start initialize module-target build option map, moduleName=learning, buildMode=release
+[2025-07-10T09:21:38.686] [DEBUG] debug-file - Start initialize module-target build option map, moduleName=uicomponents, buildMode=release
+[2025-07-10T09:21:38.630] [DEBUG] debug-file - Start initialize module-target build option map, moduleName=utils, buildMode=release
+[2025-07-10T09:21:38.703] [DEBUG] debug-file - start to load updatedOhPackageInfo to the disk
+[2025-07-10T09:21:39.046] [DEBUG] debug-file - Module 'quickstart' target 'default' using build option: {
+  "debuggable": true,
+  "copyFrom": "default",
+  "name": "debug"
+} in this build.
+[2025-07-10T09:21:38.944] [DEBUG] debug-file - runTaskFromQueue task cost before running: 5 s 319 ms 
+[2025-07-10T09:21:39.134] [DEBUG] debug-file - Current busy worker size: 0.
+[2025-07-10T09:21:38.131] [DEBUG] debug-file - No signingConfig found, initRemoteHspCache failed.
+[2025-07-10T09:21:38.352] [DEBUG] debug-file - Target 'default' config: {}
+[2025-07-10T09:21:38.469] [DEBUG] debug-file - Target 'default' config: {}
+[2025-07-10T09:21:38.584] [DEBUG] debug-file - Target 'default' config: {}
+[2025-07-10T09:21:38.523] [DEBUG] debug-file - Target 'default' config: {}
+[2025-07-10T09:21:38.687] [DEBUG] debug-file - Target 'default' config: {}
+[2025-07-10T09:21:38.630] [DEBUG] debug-file - Target 'default' config: {}
+[2025-07-10T09:21:38.720] [DEBUG] debug-file - load to the disk finished
+[2025-07-10T09:21:39.055] [DEBUG] debug-file - Module 'quickstart' target 'ohosTest' using build option: {
+  "debuggable": true,
+  "name": "default"
+} in this build.
+[2025-07-10T09:21:38.944] [INFO] debug-file - Finished ::clean... after 2 ms 
+[2025-07-10T09:21:39.134] [DEBUG] debug-file - Clear worker 1.
+[2025-07-10T09:21:38.353] [DEBUG] debug-file - Target 'ohosTest' config: {}
+[2025-07-10T09:21:38.470] [DEBUG] debug-file - Target 'ohosTest' config: {}
+[2025-07-10T09:21:38.585] [DEBUG] debug-file - Target 'ohosTest' config: {}
+[2025-07-10T09:21:38.523] [DEBUG] debug-file - Target 'ohosTest' config: {}
+[2025-07-10T09:21:38.687] [DEBUG] debug-file - Target 'ohosTest' config: {}
+[2025-07-10T09:21:38.630] [DEBUG] debug-file - Target 'ohosTest' config: {}
+[2025-07-10T09:21:38.724] [DEBUG] debug-file - Start to initialize dependency information.
+[2025-07-10T09:21:38.944] [DEBUG] debug-file - Executing task :default:init
+[2025-07-10T09:21:39.065] [DEBUG] debug-file - Module 'utils' target 'default' using build option: {
+  "debuggable": true,
+  "copyFrom": "default",
+  "name": "debug"
+} in this build.
+[2025-07-10T09:21:39.134] [DEBUG] debug-file - Worker 1 has been cleared.
+[2025-07-10T09:21:38.353] [DEBUG] debug-file - Module 'default' target 'default' build option: {
+  "debuggable": false,
+  "copyFrom": "default",
+  "name": "release",
+  "arkOptions": {
+    "obfuscation": {
+      "ruleOptions": {
+        "enable": true,
+        "files": [
+          "./obfuscation-rules.txt"
+        ]
+      }
+    }
+  }
+}
+[2025-07-10T09:21:38.470] [DEBUG] debug-file - Module 'map' target 'default' build option: {
+  "debuggable": false,
+  "copyFrom": "default",
+  "name": "release",
+  "arkOptions": {
+    "obfuscation": {
+      "ruleOptions": {
+        "enable": true,
+        "files": [
+          "./obfuscation-rules.txt"
+        ]
+      },
+      "consumerFiles": [
+        "./consumer-rules.txt"
+      ]
+    }
+  }
+}
+[2025-07-10T09:21:38.585] [DEBUG] debug-file - Module 'quickstart' target 'default' build option: {
+  "debuggable": false,
+  "copyFrom": "default",
+  "name": "release",
+  "arkOptions": {
+    "obfuscation": {
+      "ruleOptions": {
+        "enable": true,
+        "files": [
+          "./obfuscation-rules.txt"
+        ]
+      },
+      "consumerFiles": [
+        "./consumer-rules.txt"
+      ]
+    }
+  }
+}
+[2025-07-10T09:21:38.523] [DEBUG] debug-file - Module 'learning' target 'default' build option: {
+  "debuggable": false,
+  "copyFrom": "default",
+  "name": "release",
+  "arkOptions": {
+    "obfuscation": {
+      "ruleOptions": {
+        "enable": true,
+        "files": [
+          "./obfuscation-rules.txt"
+        ]
+      },
+      "consumerFiles": [
+        "./consumer-rules.txt"
+      ]
+    }
+  }
+}
+[2025-07-10T09:21:38.687] [DEBUG] debug-file - Module 'uicomponents' target 'default' build option: {
+  "debuggable": false,
+  "copyFrom": "default",
+  "name": "release",
+  "arkOptions": {
+    "obfuscation": {
+      "ruleOptions": {
+        "enable": true,
+        "files": [
+          "./obfuscation-rules.txt"
+        ]
+      },
+      "consumerFiles": [
+        "./consumer-rules.txt"
+      ]
+    }
+  }
+}
+[2025-07-10T09:21:38.630] [DEBUG] debug-file - Module 'utils' target 'default' build option: {
+  "debuggable": false,
+  "copyFrom": "default",
+  "name": "release",
+  "arkOptions": {
+    "obfuscation": {
+      "ruleOptions": {
+        "enable": true,
+        "files": [
+          "./obfuscation-rules.txt"
+        ]
+      },
+      "consumerFiles": [
+        "./consumer-rules.txt"
+      ]
+    }
+  }
+}
+[2025-07-10T09:21:38.728] [DEBUG] debug-file - Module 08_Complete Collected Dependency: 
+[2025-07-10T09:21:38.945] [DEBUG] debug-file - default : init cost memory 0.010162353515625
+[2025-07-10T09:21:39.075] [DEBUG] debug-file - Module 'utils' target 'ohosTest' using build option: {
+  "debuggable": true,
+  "name": "default"
+} in this build.
+[2025-07-10T09:21:39.134] [DEBUG] debug-file - Current idle worker size: 0.
+[2025-07-10T09:21:38.353] [DEBUG] debug-file - Module 'default' target 'ohosTest' build option: {
+  "debuggable": true,
+  "name": "default"
+}
+[2025-07-10T09:21:38.470] [DEBUG] debug-file - Module 'map' target 'ohosTest' build option: {
+  "debuggable": true,
+  "name": "default"
+}
+[2025-07-10T09:21:38.585] [DEBUG] debug-file - Module 'quickstart' target 'ohosTest' build option: {
+  "debuggable": true,
+  "name": "default"
+}
+[2025-07-10T09:21:38.523] [DEBUG] debug-file - Module 'learning' target 'ohosTest' build option: {
+  "debuggable": true,
+  "name": "default"
+}
+[2025-07-10T09:21:38.687] [DEBUG] debug-file - Module 'uicomponents' target 'ohosTest' build option: {
+  "debuggable": true,
+  "name": "default"
+}
+[2025-07-10T09:21:38.630] [DEBUG] debug-file - Module 'utils' target 'ohosTest' build option: {
+  "debuggable": true,
+  "name": "default"
+}
+[2025-07-10T09:21:38.728] [DEBUG] debug-file - Module 08_Complete's total dependency: 0
+[2025-07-10T09:21:38.945] [DEBUG] debug-file - runTaskFromQueue task cost before running: 5 s 320 ms 
+[2025-07-10T09:21:39.086] [DEBUG] debug-file - Module 'uicomponents' target 'default' using build option: {
+  "debuggable": true,
+  "copyFrom": "default",
+  "name": "debug"
+} in this build.
+[2025-07-10T09:21:39.134] [DEBUG] debug-file - Current busy worker size: 0.
+[2025-07-10T09:21:38.353] [DEBUG] debug-file - End initialize module-target build option map, moduleName=default
+[2025-07-10T09:21:38.470] [DEBUG] debug-file - End initialize module-target build option map, moduleName=map
+[2025-07-10T09:21:38.585] [DEBUG] debug-file - End initialize module-target build option map, moduleName=quickstart
+[2025-07-10T09:21:38.523] [DEBUG] debug-file - End initialize module-target build option map, moduleName=learning
+[2025-07-10T09:21:38.687] [DEBUG] debug-file - End initialize module-target build option map, moduleName=uicomponents
+[2025-07-10T09:21:38.630] [DEBUG] debug-file - End initialize module-target build option map, moduleName=utils
+[2025-07-10T09:21:38.729] [DEBUG] debug-file - Start to initialize dependency information.
+[2025-07-10T09:21:38.945] [INFO] debug-file - Finished :default:init... after 1 ms 
+[2025-07-10T09:21:39.095] [DEBUG] debug-file - Module 'uicomponents' target 'ohosTest' using build option: {
+  "debuggable": true,
+  "name": "default"
+} in this build.
+[2025-07-10T09:21:39.137] [DEBUG] debug-file - hvigor build process will be closed.
+[2025-07-10T09:21:38.354] [DEBUG] debug-file - Start initialize module-target build option map, moduleName=default, buildMode=debug
+[2025-07-10T09:21:38.470] [DEBUG] debug-file - Start initialize module-target build option map, moduleName=map, buildMode=debug
+[2025-07-10T09:21:38.585] [DEBUG] debug-file - Start initialize module-target build option map, moduleName=quickstart, buildMode=debug
+[2025-07-10T09:21:38.524] [DEBUG] debug-file - Start initialize module-target build option map, moduleName=learning, buildMode=debug
+[2025-07-10T09:21:38.687] [DEBUG] debug-file - Start initialize module-target build option map, moduleName=uicomponents, buildMode=debug
+[2025-07-10T09:21:38.630] [DEBUG] debug-file - Start initialize module-target build option map, moduleName=utils, buildMode=debug
+[2025-07-10T09:21:38.783] [DEBUG] debug-file - Module default Collected Dependency: E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\features\learning,E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\features\quickstart,E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\features\map,E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\commons\utils,E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\commons\uicomponents
+[2025-07-10T09:21:38.945] [DEBUG] debug-file - Executing task :map:init
+[2025-07-10T09:21:39.119] [DEBUG] debug-file - Since there is no instance or instance is terminated, create a new worker pool.
+[2025-07-10T09:21:39.144] [DEBUG] debug-file - worker[0] exits with exit code 0.
+[2025-07-10T09:21:38.354] [DEBUG] debug-file - Target 'default' config: {}
+[2025-07-10T09:21:38.470] [DEBUG] debug-file - Target 'default' config: {}
+[2025-07-10T09:21:38.585] [DEBUG] debug-file - Target 'default' config: {}
+[2025-07-10T09:21:38.524] [DEBUG] debug-file - Target 'default' config: {}
+[2025-07-10T09:21:38.687] [DEBUG] debug-file - Target 'default' config: {}
+[2025-07-10T09:21:38.630] [DEBUG] debug-file - Target 'default' config: {}
+[2025-07-10T09:21:38.783] [DEBUG] debug-file - Module default's total dependency: 5
+[2025-07-10T09:21:38.945] [DEBUG] debug-file - map : init cost memory 0.00803375244140625
+[2025-07-10T09:21:39.120] [DEBUG] debug-file - Worker pool is initialized with config:  {
+  minPoolNum: 2,
+  maxPoolNum: undefined,
+  maxCoreSize: undefined,
+  cacheCapacity: undefined,
+  cacheTtl: undefined
+}
+[2025-07-10T09:21:39.145] [DEBUG] debug-file - worker[1] exits with exit code 0.
+[2025-07-10T09:21:38.354] [DEBUG] debug-file - Target 'ohosTest' config: {}
+[2025-07-10T09:21:38.470] [DEBUG] debug-file - Target 'ohosTest' config: {}
+[2025-07-10T09:21:38.585] [DEBUG] debug-file - Target 'ohosTest' config: {}
+[2025-07-10T09:21:38.524] [DEBUG] debug-file - Target 'ohosTest' config: {}
+[2025-07-10T09:21:38.687] [DEBUG] debug-file - Target 'ohosTest' config: {}
+[2025-07-10T09:21:38.630] [DEBUG] debug-file - Target 'ohosTest' config: {}
+[2025-07-10T09:21:38.791] [DEBUG] debug-file - Start to initialize dependency information.
+[2025-07-10T09:21:38.945] [DEBUG] debug-file - runTaskFromQueue task cost before running: 5 s 320 ms 
+[2025-07-10T09:21:39.146] [DEBUG] debug-file - Current worker pool is terminated.
+[2025-07-10T09:21:38.471] [DEBUG] debug-file - Module 'map' target 'default' build option: {
+  "debuggable": true,
+  "copyFrom": "default",
+  "name": "debug"
+}
+[2025-07-10T09:21:38.354] [DEBUG] debug-file - Module 'default' target 'default' build option: {
+  "debuggable": true,
+  "copyFrom": "default",
+  "name": "debug"
+}
+[2025-07-10T09:21:38.585] [DEBUG] debug-file - Module 'quickstart' target 'default' build option: {
+  "debuggable": true,
+  "copyFrom": "default",
+  "name": "debug"
+}
+[2025-07-10T09:21:38.524] [DEBUG] debug-file - Module 'learning' target 'default' build option: {
+  "debuggable": true,
+  "copyFrom": "default",
+  "name": "debug"
+}
+[2025-07-10T09:21:38.687] [DEBUG] debug-file - Module 'uicomponents' target 'default' build option: {
+  "debuggable": true,
+  "copyFrom": "default",
+  "name": "debug"
+}
+[2025-07-10T09:21:38.631] [DEBUG] debug-file - Module 'utils' target 'default' build option: {
+  "debuggable": true,
+  "copyFrom": "default",
+  "name": "debug"
+}
+[2025-07-10T09:21:38.797] [DEBUG] debug-file - Module map Collected Dependency: E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\commons\utils,E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\commons\uicomponents
+[2025-07-10T09:21:38.945] [INFO] debug-file - Finished :map:init... after 1 ms 
+[2025-07-10T09:21:38.471] [DEBUG] debug-file - Module 'map' target 'ohosTest' build option: {
+  "debuggable": true,
+  "name": "default"
+}
+[2025-07-10T09:21:38.354] [DEBUG] debug-file - Module 'default' target 'ohosTest' build option: {
+  "debuggable": true,
+  "name": "default"
+}
+[2025-07-10T09:21:38.585] [DEBUG] debug-file - Module 'quickstart' target 'ohosTest' build option: {
+  "debuggable": true,
+  "name": "default"
+}
+[2025-07-10T09:21:38.524] [DEBUG] debug-file - Module 'learning' target 'ohosTest' build option: {
+  "debuggable": true,
+  "name": "default"
+}
+[2025-07-10T09:21:38.687] [DEBUG] debug-file - Module 'uicomponents' target 'ohosTest' build option: {
+  "debuggable": true,
+  "name": "default"
+}
+[2025-07-10T09:21:38.631] [DEBUG] debug-file - Module 'utils' target 'ohosTest' build option: {
+  "debuggable": true,
+  "name": "default"
+}
+[2025-07-10T09:21:38.797] [DEBUG] debug-file - Module map's total dependency: 2
+[2025-07-10T09:21:38.946] [DEBUG] debug-file - Executing task :learning:init
+[2025-07-10T09:21:38.471] [DEBUG] debug-file - End initialize module-target build option map, moduleName=map
+[2025-07-10T09:21:38.354] [DEBUG] debug-file - End initialize module-target build option map, moduleName=default
+[2025-07-10T09:21:38.585] [DEBUG] debug-file - End initialize module-target build option map, moduleName=quickstart
+[2025-07-10T09:21:38.524] [DEBUG] debug-file - End initialize module-target build option map, moduleName=learning
+[2025-07-10T09:21:38.687] [DEBUG] debug-file - End initialize module-target build option map, moduleName=uicomponents
+[2025-07-10T09:21:38.631] [DEBUG] debug-file - End initialize module-target build option map, moduleName=utils
+[2025-07-10T09:21:38.800] [DEBUG] debug-file - Start to initialize dependency information.
+[2025-07-10T09:21:38.946] [DEBUG] debug-file - learning : init cost memory 0.008056640625
+[2025-07-10T09:21:38.471] [DEBUG] debug-file - Module 'map' target 'default' using build option: {
+  "debuggable": true,
+  "copyFrom": "default",
+  "name": "debug"
+} in this build.
+[2025-07-10T09:21:38.354] [DEBUG] debug-file - Module 'default' target 'default' using build option: {
+  "debuggable": true,
+  "copyFrom": "default",
+  "name": "debug"
+} in this build.
+[2025-07-10T09:21:38.585] [DEBUG] debug-file - Module 'quickstart' target 'default' using build option: {
+  "debuggable": true,
+  "copyFrom": "default",
+  "name": "debug"
+} in this build.
+[2025-07-10T09:21:38.524] [DEBUG] debug-file - Module 'learning' target 'default' using build option: {
+  "debuggable": true,
+  "copyFrom": "default",
+  "name": "debug"
+} in this build.
+[2025-07-10T09:21:38.687] [DEBUG] debug-file - Module 'uicomponents' target 'default' using build option: {
+  "debuggable": true,
+  "copyFrom": "default",
+  "name": "debug"
+} in this build.
+[2025-07-10T09:21:38.631] [DEBUG] debug-file - Module 'utils' target 'default' using build option: {
+  "debuggable": true,
+  "copyFrom": "default",
+  "name": "debug"
+} in this build.
+[2025-07-10T09:21:38.805] [DEBUG] debug-file - Module learning Collected Dependency: E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\commons\utils,E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\commons\uicomponents
+[2025-07-10T09:21:38.946] [DEBUG] debug-file - runTaskFromQueue task cost before running: 5 s 321 ms 
+[2025-07-10T09:21:38.805] [DEBUG] debug-file - Module learning's total dependency: 2
+[2025-07-10T09:21:38.946] [INFO] debug-file - Finished :learning:init... after 1 ms 
+[2025-07-10T09:21:38.809] [DEBUG] debug-file - Start to initialize dependency information.
+[2025-07-10T09:21:38.946] [DEBUG] debug-file - Executing task :quickstart:init
+[2025-07-10T09:21:38.814] [DEBUG] debug-file - Module quickstart Collected Dependency: E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\commons\utils,E:\Code\practice\Harmony\QuickStart-master\QuickStart-master\08_DataDrivenUIUpdates\08_Complete\commons\uicomponents
+[2025-07-10T09:21:38.946] [DEBUG] debug-file - quickstart : init cost memory 0.00803375244140625
+[2025-07-10T09:21:38.814] [DEBUG] debug-file - Module quickstart's total dependency: 2
+[2025-07-10T09:21:38.946] [DEBUG] debug-file - runTaskFromQueue task cost before running: 5 s 321 ms 
+[2025-07-10T09:21:38.818] [DEBUG] debug-file - Start to initialize dependency information.
+[2025-07-10T09:21:38.946] [INFO] debug-file - Finished :quickstart:init... after 1 ms 
+[2025-07-10T09:21:38.822] [DEBUG] debug-file - Module utils Collected Dependency: 
+[2025-07-10T09:21:38.947] [DEBUG] debug-file - Executing task :utils:init
+[2025-07-10T09:21:38.822] [DEBUG] debug-file - Module utils's total dependency: 0
+[2025-07-10T09:21:38.947] [DEBUG] debug-file - utils : init cost memory 0.008056640625
+[2025-07-10T09:21:38.827] [DEBUG] debug-file - Start to initialize dependency information.
+[2025-07-10T09:21:38.947] [DEBUG] debug-file - runTaskFromQueue task cost before running: 5 s 322 ms 
+[2025-07-10T09:21:38.830] [DEBUG] debug-file - Module uicomponents Collected Dependency: 
+[2025-07-10T09:21:38.947] [INFO] debug-file - Finished :utils:init... after 1 ms 
+[2025-07-10T09:21:38.830] [DEBUG] debug-file - Module uicomponents's total dependency: 0
+[2025-07-10T09:21:38.947] [DEBUG] debug-file - Executing task :uicomponents:init
+[2025-07-10T09:21:38.833] [DEBUG] debug-file - Configuration phase cost:5 s 98 ms 
+[2025-07-10T09:21:38.947] [DEBUG] debug-file - uicomponents : init cost memory 0.0080413818359375
+[2025-07-10T09:21:38.947] [DEBUG] debug-file - runTaskFromQueue task cost before running: 5 s 322 ms 
+[2025-07-10T09:21:38.947] [INFO] debug-file - Finished :uicomponents:init... after 1 ms 
+[2025-07-10T09:21:38.947] [DEBUG] debug-file - Executing task ::init
+[2025-07-10T09:21:38.948] [DEBUG] debug-file - 08_Complete : init cost memory 0.0092315673828125
+[2025-07-10T09:21:38.948] [DEBUG] debug-file - runTaskFromQueue task cost before running: 5 s 323 ms 
+[2025-07-10T09:21:38.948] [INFO] debug-file - Finished ::init... after 1 ms 

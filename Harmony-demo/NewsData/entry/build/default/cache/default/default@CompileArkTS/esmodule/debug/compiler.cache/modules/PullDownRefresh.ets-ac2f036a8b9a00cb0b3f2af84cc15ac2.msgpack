@@ -1,0 +1,458 @@
+Ôr@Ÿªassertions¤code´customTransformCache¬dependencies¢id¤meta±moduleSideEffects¬originalCode±originalSourcemap«resolvedIds®sourcemapChainµsyntheticNamedExportsµtransformDependencies®transformFiles¨cacheAstÔrAÚsimport { touchMoveLoadMore, touchUpLoadMore } from './PullUpLoadMore';
+import { CommonConstant as Const } from '../constant/CommonConstant';
+import NewsViewModel from '../../viewmodel/NewsViewModel';
+//è·å–UIä¸Šä¸‹æ–‡
+const uiContext = AppStorage.get('uiContext');
+//å¤„ç†åˆ—è¡¨è§¦æ‘¸äº‹ä»¶
+export function listTouchEvent(that, event) {
+    switch (event.type) {
+        case TouchType.Down:
+            //è®°å½•æ‰‹æŒ‡æŒ‰ä¸‹çš„åˆå§‹ä½ç½®
+            that.downY = event.touches[0].y;
+            that.lastMoveY = event.touches[0].y;
+            break;
+        case TouchType.Move:
+            //å¦‚æœæ­£åœ¨åˆ·æ–°æˆ–åŠ è½½ï¼Œä¸å¤„ç†
+            if ((that.isRefreshing === true) || (that.isLoading === true)) {
+                return;
+            }
+            //åˆ¤æ–­æ˜¯å¦ä¸‹æ‹‰
+            let isDownPull = event.touches[0].y - that.lastMoveY > 0;
+            if (((isDownPull === true) || (that.isPullRefreshOperation === true)) && (that.isCanLoadMore === false)) {
+                //å¤„ç†ä¸‹æ‹‰åˆ·æ–°
+                touchMovePullRefresh(that, event);
+            }
+            else {
+                //å¤„ç†ä¸Šæ‹‰åŠ è½½æ›´å¤š
+                touchMoveLoadMore(that, event);
+            }
+            that.lastMoveY = event.touches[0].y;
+            break;
+        case TouchType.Cancel:
+            break;
+        case TouchType.Up:
+            if ((that.isRefreshing === true) || (that.isLoading === true)) {
+                return;
+            }
+            if ((that.isPullRefreshOperation === true)) {
+                touchUpPullRefresh(that);
+            }
+            else {
+                touchUpLoadMore(that);
+            }
+            break;
+        default:
+            break;
+    }
+}
+//å¤„ç†ä¸‹æ‹‰åˆ·æ–°
+export function touchMovePullRefresh(that, event) {
+    if (that.startIndex === 0) {
+        that.isPullRefreshOperation = true;
+        let height = uiContext.vp2px(that.pullDownRefreshHeight);
+        that.offsetY = event.touches[0].y - that.downY;
+        //ä¸‹æ‹‰è·ç¦»è¶…è¿‡åˆ·æ–°å¸ƒå±€é«˜åº¦ï¼Œæ»¡è¶³åˆ·æ–°æ¡ä»¶
+        if (that.offsetY >= height) {
+            pullRefreshState(that, 1 /* RefreshState.Release */);
+            that.offsetY = height + that.offsetY * Const.Y_OFF_SET_COEFFICIENT;
+        }
+        else {
+            pullRefreshState(that, 0 /* RefreshState.DropDown */);
+        }
+        if (that.offsetY < 0) {
+            that.offsetY = 0;
+            that.isPullRefreshOperation = false;
+        }
+    }
+}
+//å¤„ç†ä¸‹æ‹‰åˆ·æ–°çš„æ‰‹æŒ‡æŠ¬èµ·äº‹ä»¶
+export function touchUpPullRefresh(that) {
+    if (that.isCanRefresh === true) {
+        that.offsetY = uiContext.vp2px(that.pullDownRefreshHeight);
+        pullRefreshState(that, 2 /* RefreshState.Refreshing */);
+        that.currentPage = 1;
+        setTimeout(() => {
+            let self = that;
+            //è¯·æ±‚æ–°é—»åˆ—è¡¨æ•°æ®
+            NewsViewModel.getNewsList(that.currentPage, that.pageSize, Const.GET_NEWS_LIST).then((data) => {
+                if (data.length === that.pageSize) {
+                    self.hasMore = true;
+                    self.currentPage++;
+                }
+                else {
+                    self.hasMore = false;
+                }
+                self.newsData = data;
+                closeRefresh(self, true);
+            }).catch((err) => {
+                uiContext.getPromptAction().showToast({ message: err });
+                closeRefresh(self, false);
+            });
+        }, Const.DELAY_TIME);
+    }
+    else {
+        closeRefresh(that, false);
+    }
+}
+//è®¾ç½®ä¸‹æ‹‰åˆ·æ–°çŠ¶æ€
+export function pullRefreshState(that, state) {
+    switch (state) {
+        case 0 /* RefreshState.DropDown */:
+            //ä¸‹æ‹‰çŠ¶æ€
+            that.pullDownRefreshText = { "id": 16777225, "type": 10003, params: [], "bundleName": "com.example.newsdataarkts", "moduleName": "entry" };
+            that.pullDownRefreshImage = { "id": 16777241, "type": 20000, params: [], "bundleName": "com.example.newsdataarkts", "moduleName": "entry" };
+            that.isCanRefresh = false;
+            that.isRefreshing = false;
+            that.isVisiblePullDown = true;
+            break;
+        case 1 /* RefreshState.Release */:
+            //é‡Šæ”¾çŠ¶æ€
+            that.pullDownRefreshText = { "id": 16777230, "type": 10003, params: [], "bundleName": "com.example.newsdataarkts", "moduleName": "entry" };
+            that.pullDownRefreshImage = { "id": 16777243, "type": 20000, params: [], "bundleName": "com.example.newsdataarkts", "moduleName": "entry" };
+            that.isCanRefresh = true;
+            that.isRefreshing = false;
+            break;
+        case 2 /* RefreshState.Refreshing */:
+            //åˆ·æ–°ä¸­çŠ¶æ€
+            that.offsetY = uiContext.vp2px(that.pullDownRefreshHeight);
+            that.pullDownRefreshText = { "id": 16777229, "type": 10003, params: [], "bundleName": "com.example.newsdataarkts", "moduleName": "entry" };
+            that.pullDownRefreshImage = { "id": 16777242, "type": 20000, params: [], "bundleName": "com.example.newsdataarkts", "moduleName": "entry" };
+            that.isCanRefresh = true;
+            that.isRefreshing = true;
+            break;
+        case 3 /* RefreshState.Success */:
+            //åˆ·æ–°æˆåŠŸçŠ¶æ€
+            that.pullDownRefreshText = { "id": 16777228, "type": 10003, params: [], "bundleName": "com.example.newsdataarkts", "moduleName": "entry" };
+            that.pullDownRefreshImage = { "id": 16777244, "type": 20000, params: [], "bundleName": "com.example.newsdataarkts", "moduleName": "entry" };
+            that.isCanRefresh = true;
+            that.isRefreshing = true;
+            break;
+        case 4 /* RefreshState.Fail */:
+            //åˆ·æ–°å¤±è´¥çŠ¶æ€
+            that.pullDownRefreshText = { "id": 16777227, "type": 10003, params: [], "bundleName": "com.example.newsdataarkts", "moduleName": "entry" };
+            that.pullDownRefreshImage = { "id": 16777240, "type": 20000, params: [], "bundleName": "com.example.newsdataarkts", "moduleName": "entry" };
+            that.isCanRefresh = true;
+            that.isRefreshing = true;
+            break;
+        default:
+            break;
+    }
+}
+//å…³é—­åˆ·æ–°
+export function closeRefresh(that, isRefreshSuccess) {
+    let self = that;
+    setTimeout(() => {
+        let delay = Const.RefreshConstant_DELAY_PULL_DOWN_REFRESH;
+        if (self.isCanRefresh === true) {
+            pullRefreshState(that, isRefreshSuccess ? 3 /* RefreshState.Success */ : 4 /* RefreshState.Fail */);
+            delay = Const.RefreshConstant_DELAY_SHRINK_ANIMATION_TIME;
+        }
+        //æ‰§è¡ŒåŠ¨ç”»ï¼Œå…³é—­åˆ·æ–°
+        uiContext.animateTo({
+            duration: Const.RefreshConstant_CLOSE_PULL_DOWN_REFRESH_TIME,
+            delay: delay,
+            onFinish: () => {
+                pullRefreshState(that, 0 /* RefreshState.DropDown */);
+                self.isVisiblePullDown = false;
+                self.isPullRefreshOperation = false;
+            }
+        }, () => {
+            self.offsetY = 0;
+        });
+    }, self.isCanRefresh ? Const.DELAY_ANIMATION_DURATION : 0);
+}
+//# sourceMappingURL=PullDownRefresh.js.mapÂ“ÙTE:\Code\practice\Harmony\NewsData\entry\src\main\ets\common\utils\PullUpLoadMore.etsÙWE:\Code\practice\Harmony\NewsData\entry\src\main\ets\common\constant\CommonConstant.etsÙPE:\Code\practice\Harmony\NewsData\entry\src\main\ets\viewmodel\NewsViewModel.etsÙUE:\Code\practice\Harmony\NewsData\entry\src\main\ets\common\utils\PullDownRefresh.etsÔrB›ªmoduleName±isLocalDependency¯isNodeEntryFile§pkgPath±belongProjectPath§pkgNameªpkgVersion±dependencyPkgInfo¯hostModulesInfo°belongModulePath¬shouldEmitJs¥entryÃÂÙ'E:\Code\practice\Harmony\NewsData\entryÙ!E:\Code\practice\Harmony\NewsData¥entry¥1.0.0Ô  ‘ÔrC’²hostDependencyName®hostModuleName¿../common/utils/PullDownRefresh¥entryÙ'E:\Code\practice\Harmony\NewsData\entryÃÃÚfimport { promptAction } from '@kit.ArkUI';
+import { touchMoveLoadMore, touchUpLoadMore } from './PullUpLoadMore';
+import {
+  CommonConstant as Const,
+  RefreshState
+} from '../constant/CommonConstant';
+import NewsViewModel from '../../viewmodel/NewsViewModel';
+import { NewsData } from '../../viewmodel/NewsData';
+import NewsModel from '../../viewmodel/NewsModel';
+
+//è·å–UIä¸Šä¸‹æ–‡
+const uiContext: UIContext | undefined = AppStorage.get('uiContext');
+
+//å¤„ç†åˆ—è¡¨è§¦æ‘¸äº‹ä»¶
+export function listTouchEvent(that: NewsModel, event: TouchEvent) {
+  switch (event.type) {
+    case TouchType.Down:
+      //è®°å½•æ‰‹æŒ‡æŒ‰ä¸‹çš„åˆå§‹ä½ç½®
+      that.downY = event.touches[0].y;
+      that.lastMoveY = event.touches[0].y;
+      break;
+    case TouchType.Move:
+      //å¦‚æœæ­£åœ¨åˆ·æ–°æˆ–åŠ è½½ï¼Œä¸å¤„ç†
+      if ((that.isRefreshing === true) || (that.isLoading === true)) {
+        return;
+      }
+      //åˆ¤æ–­æ˜¯å¦ä¸‹æ‹‰
+      let isDownPull = event.touches[0].y - that.lastMoveY > 0;
+      if (((isDownPull === true) || (that.isPullRefreshOperation === true)) && (that.isCanLoadMore === false)) {
+        //å¤„ç†ä¸‹æ‹‰åˆ·æ–°
+        touchMovePullRefresh(that, event);
+      } else {
+        //å¤„ç†ä¸Šæ‹‰åŠ è½½æ›´å¤š
+        touchMoveLoadMore(that, event);
+      }
+      that.lastMoveY = event.touches[0].y;
+      break;
+    case TouchType.Cancel:
+      break;
+    case TouchType.Up:
+      if ((that.isRefreshing === true) || (that.isLoading === true)) {
+        return;
+      }
+      if ((that.isPullRefreshOperation === true)) {
+        touchUpPullRefresh(that);
+      } else {
+        touchUpLoadMore(that);
+      }
+      break;
+    default:
+      break;
+  }
+}
+
+//å¤„ç†ä¸‹æ‹‰åˆ·æ–°
+export function touchMovePullRefresh(that: NewsModel, event: TouchEvent) {
+  if (that.startIndex === 0) {
+    that.isPullRefreshOperation = true;
+    let height = uiContext!.vp2px(that.pullDownRefreshHeight);
+    that.offsetY = event.touches[0].y - that.downY;
+    //ä¸‹æ‹‰è·ç¦»è¶…è¿‡åˆ·æ–°å¸ƒå±€é«˜åº¦ï¼Œæ»¡è¶³åˆ·æ–°æ¡ä»¶
+    if (that.offsetY >= height) {
+      pullRefreshState(that, RefreshState.Release);
+      that.offsetY = height + that.offsetY * Const.Y_OFF_SET_COEFFICIENT;
+    } else {
+      pullRefreshState(that, RefreshState.DropDown);
+    }
+    if (that.offsetY < 0) {
+      that.offsetY = 0;
+      that.isPullRefreshOperation = false;
+    }
+  }
+}
+
+//å¤„ç†ä¸‹æ‹‰åˆ·æ–°çš„æ‰‹æŒ‡æŠ¬èµ·äº‹ä»¶
+export function touchUpPullRefresh(that: NewsModel) {
+  if (that.isCanRefresh === true) {
+    that.offsetY = uiContext!.vp2px(that.pullDownRefreshHeight);
+    pullRefreshState(that, RefreshState.Refreshing);
+    that.currentPage = 1;
+    setTimeout(() => {
+      let self = that;
+      //è¯·æ±‚æ–°é—»åˆ—è¡¨æ•°æ®
+      NewsViewModel.getNewsList(that.currentPage, that.pageSize, Const.GET_NEWS_LIST).then((data: NewsData[]) => {
+        if (data.length === that.pageSize) {
+          self.hasMore = true;
+          self.currentPage++;
+        } else {
+          self.hasMore = false;
+        }
+        self.newsData = data;
+        closeRefresh(self, true);
+      }).catch((err: string | Resource) => {
+        uiContext!.getPromptAction().showToast({ message: err });
+        closeRefresh(self, false);
+      });
+    }, Const.DELAY_TIME);
+  } else {
+    closeRefresh(that, false);
+  }
+}
+
+//è®¾ç½®ä¸‹æ‹‰åˆ·æ–°çŠ¶æ€
+export function pullRefreshState(that: NewsModel, state: number) {
+  switch (state) {
+    case RefreshState.DropDown:
+      //ä¸‹æ‹‰çŠ¶æ€
+      that.pullDownRefreshText = $r('app.string.pull_down_refresh_text');
+      that.pullDownRefreshImage = $r("app.media.ic_pull_down_refresh");
+      that.isCanRefresh = false;
+      that.isRefreshing = false;
+      that.isVisiblePullDown = true;
+      break;
+    case RefreshState.Release:
+      //é‡Šæ”¾çŠ¶æ€
+      that.pullDownRefreshText = $r('app.string.release_refresh_text');
+      that.pullDownRefreshImage = $r("app.media.ic_pull_up_refresh");
+      that.isCanRefresh = true;
+      that.isRefreshing = false;
+      break;
+    case RefreshState.Refreshing:
+      //åˆ·æ–°ä¸­çŠ¶æ€
+      that.offsetY = uiContext!.vp2px(that.pullDownRefreshHeight);
+      that.pullDownRefreshText = $r('app.string.refreshing_text');
+      that.pullDownRefreshImage = $r("app.media.ic_pull_up_load");
+      that.isCanRefresh = true;
+      that.isRefreshing = true;
+      break;
+    case RefreshState.Success:
+      //åˆ·æ–°æˆåŠŸçŠ¶æ€
+      that.pullDownRefreshText = $r('app.string.refresh_success_text');
+      that.pullDownRefreshImage = $r("app.media.ic_succeed_refresh");
+      that.isCanRefresh = true;
+      that.isRefreshing = true;
+      break;
+    case RefreshState.Fail:
+      //åˆ·æ–°å¤±è´¥çŠ¶æ€
+      that.pullDownRefreshText = $r('app.string.refresh_fail_text');
+      that.pullDownRefreshImage = $r("app.media.ic_fail_refresh");
+      that.isCanRefresh = true;
+      that.isRefreshing = true;
+      break;
+    default:
+      break;
+  }
+}
+
+//å…³é—­åˆ·æ–°
+export function closeRefresh(that: NewsModel, isRefreshSuccess: boolean) {
+  let self = that;
+  setTimeout(() => {
+    let delay = Const.RefreshConstant_DELAY_PULL_DOWN_REFRESH;
+    if (self.isCanRefresh === true) {
+      pullRefreshState(that, isRefreshSuccess ? RefreshState.Success : RefreshState.Fail);
+      delay = Const.RefreshConstant_DELAY_SHRINK_ANIMATION_TIME;
+    }
+    //æ‰§è¡ŒåŠ¨ç”»ï¼Œå…³é—­åˆ·æ–°
+    uiContext!.animateTo({
+      duration: Const.RefreshConstant_CLOSE_PULL_DOWN_REFRESH_TIME,
+      delay: delay,
+      onFinish: () => {
+        pullRefreshState(that, RefreshState.DropDown);
+        self.isVisiblePullDown = false;
+        self.isPullRefreshOperation = false;
+      }
+    }, () => {
+      self.offsetY = 0;
+    })
+  }, self.isCanRefresh ? Const.DELAY_ANIMATION_DURATION : 0);
+}ÀÔrD“º../constant/CommonConstant½../../viewmodel/NewsViewModel°./PullUpLoadMoreÔrE—ªassertions¨external¢id¤meta±moduleSideEffectsªresolvedByµsyntheticNamedExportsAÂÙWE:\Code\practice\Harmony\NewsData\entry\src\main\ets\common\constant\CommonConstant.etsAÃªoh-resolveÂEAÂÙPE:\Code\practice\Harmony\NewsData\entry\src\main\ets\viewmodel\NewsViewModel.etsAÃªoh-resolveÂEAÂÙTE:\Code\practice\Harmony\NewsData\entry\src\main\ets\common\utils\PullUpLoadMore.etsAÃªoh-resolveÂ“ÔrF–§version¤fileªsourceRoot§sources¥names¨mappings²PullDownRefresh.js ‘³PullDownRefresh.etsÜ £š”   ” ”	 	” ” ”+ +”- -”3 3”ÌE ÌE”ÌF ÌFš”   ” ”	 ” ” ”  ”" ”( ”ÌD #”ÌE $–”   ” ” ” ”9 9”: :’”  
+ ”	 
+	›”   ” ” ” )” 3” 4”  7”! 8”, ÌC”- ÌD”. ÌE’”   ”
+ 
+˜”   ” ” ” ” ”# .”% 0”* ÌA–” ” 
+” ” ” ” •” ” 	” ” ” ’” ” ” ” 
+” ” ” ” ” ”&  ”' !”( "”) #”* $”+ %”, &” ” 
+” ” ” ”" ”# ”* $”+ %”, &”- '”. (”/ )”0 *’” ” •” ” 	” ” ” ’” ” Ü ” ” 
+” ” ” ”" ”' !”+ %”, &”0 *”1 +”5 /”6 0”? 9”ÌD >”ÌH ÌB”ÌI ÌC”ÌK ÌE’” ” ‘” ’” ” Ü ” ” 
+” ” ”" ”# ”* $”+ %”, &”- '”. (”/ )”2 ,”6 0”7 1”Ì@ :”ÌC =”ÌD >”ÌE ?Ü ” ” 
+” ” ” ”! ”% ”&  ”* $”+ %”/ )”0 *”ÌF Ì@”ÌK ÌE”ÌO ÌI”ÌP ÌJ”ÌQ ÌK”ÌU ÌO”ÌV ÌP”ÌZ ÌT”Ì[ ÌU”Ìh Ìb”Ìm Ìg”Ìr Ìl”Ìs Ìm”Ìu Ìo’” ” ˜” ”$ ”% ”) !”+ #”0 (”1 )”2 *‘” ‘” ’”  ”  ˜” !”! !”" !”& !”( ! ”- !%”. !&”/ !'‘” "” #” #
+” #” #” #”" #”# #”* #$”+ #%”, #&”- #'”. #(”/ #)”0 #*’” $” $•” %” %	” %” %” %’” &” &•” '” '	” '” '” 'Ü ” (” (
+” (” (” (”" (”' (!”+ (%”, (&”0 (*”1 (+”5 (/”6 (0”? (9”ÌD (>”ÌH (ÌB”ÌI (ÌC”ÌK (ÌE’” )” )‘” *š” +” +
+” +” +” +”, +&”1 ++”5 +/”6 +0”8 +2–” ,”" ,”# ,”' ,”( , ”) ,!‘” -‘” -–” .” .”  .”$ .”% .”& .‘” /’” 0” 0‘” 1’” 2” 2‘” 3’”  4 ” 4’”  6 ” 6˜”  7 ” 7” 7”$ 7$”% 7%”) 74”+ 76”0 7ÌG˜” 8” 8” 8
+” 8” 8” 8” 8” 8—” 9” 9” 9	”# 9”& 9"”* 9&”+ 9'” :” :” :” :” :” :”$ :!”% :"”) :&”* :'”? :<”Ì@ :=”ÌA :>Ü ” ;” ;” ;	” ;” ;” ;” ;”$ ; ”% ;!”& ;"”' ;#”( ;$”) ;%”, ;(”0 ;,”1 ;-”6 ;2”7 ;3’” <” <˜” =” =” =” =” =” =”" =”$ = –” >” >” >”! >”Ì@ >2”ÌA >3Ÿ” ?” ?
+” ?” ?” ?”! ?”$ ?”( ?"”) ?#”0 ?*”3 ?-”8 ?2”9 ?3”ÌN ?ÌH”ÌO ?ÌI‘”	 Ì@‘” Ì@–” ÌA” ÌA” ÌA”! ÌA”ÌA ÌA3”ÌB ÌA4‘”	 ÌB˜” ÌC” ÌC” ÌC” ÌC” ÌC” ÌC” ÌC” ÌC—” ÌD” ÌD
+” ÌD” ÌD” ÌD” ÌD” ÌD—” ÌE” ÌE
+” ÌE”' ÌE!”* ÌE$”/ ÌE)”0 ÌE*‘”	 ÌF‘” ÌG’”  ÌH ” ÌH’”  ÌJ ” ÌJ–”  ÌK ” ÌK” ÌK”" ÌK"”# ÌK#”' ÌK2˜” ÌL” ÌL” ÌL
+” ÌL” ÌL” ÌL”" ÌL ”$ ÌL"” ÌM” ÌM” ÌM	” ÌM” ÌM”  ÌM”! ÌM”& ÌM#”' ÌM$”+ ÌM(”, ÌM)”ÌA ÌM>”ÌB ÌM?”ÌC ÌMÌ@–” ÌN” ÌN” ÌN” ÌN”? ÌN3”Ì@ ÌN4—” ÌO” ÌO” ÌO	” ÌO” ÌO” ÌO” ÌO•” ÌP” ÌP” ÌP” ÌP” ÌP–” ÌQ” ÌQ
+” ÌQ” ÌQ” ÌQ” ÌQ’” ÌR” ÌRÜ ” ÌS” ÌS” ÌS”% ÌS”& ÌS ”* ÌS$”+ ÌS%”6 ÌS0”8 ÌS2”< ÌS6”= ÌS7”ÌE ÌS?”ÌG ÌSÌA”ÌL ÌSÌF”ÌM ÌSÌG”ÌZ ÌSÌT”Ì[ ÌSÌU”Ì\ ÌSÌV”Ì` ÌSÌZ”Ìa ÌSÌ[”Ìb ÌSÌ\”Ìf ÌSÌl”Ìh ÌSÌn”Ìj ÌSÌpš” ÌT” ÌT” ÌT” ÌT” ÌT”$ ÌT”( ÌT ”) ÌT!”1 ÌT)”3 ÌT+—” ÌU
+” ÌU” ÌU”  ÌU”# ÌU”' ÌU”( ÌU–” ÌV
+” ÌV” ÌV”$ ÌV”& ÌV”' ÌV‘” ÌW	‘” ÌW—” ÌX
+” ÌX” ÌX”  ÌX”# ÌX”( ÌX”) ÌX‘” ÌY	—” ÌZ” ÌZ” ÌZ” ÌZ”  ÌZ”$ ÌZ”% ÌZ˜” Ì[” Ì[” Ì[”! Ì[”# Ì[”' Ì[”( Ì[ ”) Ì[!š” Ì\” Ì\” Ì\” Ì\	” Ì\” Ì\” Ì\” Ì\&” Ì\(” Ì\*Ÿ” Ì]” Ì]” Ì]”) Ì]"”+ Ì]$”, Ì]%”5 Ì].”6 Ì]/”8 Ì]1”? Ì]8”ÌA Ì]:”ÌD Ì]=”ÌF Ì]?”ÌG Ì]Ì@”ÌH Ì]ÌA˜” Ì^” Ì^” Ì^”! Ì^”# Ì^”( Ì^ ”) Ì^!”* Ì^"”” Ì_” Ì_” Ì_” Ì_	˜” Ì`”	 Ì`” Ì`” Ì`” Ì`” Ì`” Ì`” Ì`‘” Ìa‘”	 Ìa	˜” Ìb” Ìb” Ìb” Ìb” Ìb”  Ìb”! Ìb”" Ìb‘” Ìc’”  Ìd ” Ìd’”  Ìf ”
+ Ìf
+˜”  Ìg ” Ìg” Ìg”  Ìg ”! Ìg!”% Ìg0”' Ìg2”, Ìg?”” Ìh” Ìh
+” Ìh” Ìh‘” Ìi’” Ìj” Ìj–” Ìk” Ìk
+” Ìk”$ Ìk”Ì– ÌkÌH”Ì— ÌkÌI–” Ìl” Ìl
+” Ìl”% Ìl”Ì— ÌlÌF”Ì˜ ÌlÌG—” Ìm” Ìm
+” Ìm” Ìm”  Ìm”% Ìm”& Ìm —” Ìn” Ìn
+” Ìn” Ìn”  Ìn”% Ìn”& Ìn —” Ìo” Ìo
+” Ìo”" Ìo”% Ìo”) Ìo#”* Ìo$’” Ìp” Ìp‘” Ìq’” Ìr” Ìr–” Ìs” Ìs
+” Ìs”$ Ìs”Ì– ÌsÌF”Ì— ÌsÌG–” Ìt” Ìt
+” Ìt”% Ìt”Ì— ÌtÌD”Ì˜ ÌtÌE—” Ìu” Ìu
+” Ìu” Ìu”  Ìu”$ Ìu”% Ìu—” Ìv” Ìv
+” Ìv” Ìv”  Ìv”% Ìv”& Ìv ’” Ìw” Ìw‘” Ìx’” Ìy” Ìy” Ìz” Ìz
+” Ìz” Ìz” Ìz”$ Ìz”% Ìz ”* Ìz%”+ Ìz&”/ Ìz*”0 Ìz+”ÌE ÌzÌ@”ÌF ÌzÌA”ÌG ÌzÌB–” Ì{” Ì{
+” Ì{”$ Ì{”Ì– Ì{ÌA”Ì— Ì{ÌB–” Ì|” Ì|
+” Ì|”% Ì|”Ì— Ì|ÌA”Ì˜ Ì|ÌB—” Ì}” Ì}
+” Ì}” Ì}”  Ì}”$ Ì}”% Ì}—” Ì~” Ì~
+” Ì~” Ì~”  Ì~”$ Ì~”% Ì~’” Ì” Ì‘” Ì€’” Ì” Ì–” Ì‚” Ì‚
+” Ì‚”$ Ì‚”Ì– Ì‚ÌF”Ì— Ì‚ÌG–” Ìƒ” Ìƒ
+” Ìƒ”% Ìƒ”Ì— ÌƒÌD”Ì˜ ÌƒÌE—” Ì„” Ì„
+” Ì„” Ì„”  Ì„”$ Ì„”% Ì„—” Ì…” Ì…
+” Ì…” Ì…”  Ì…”$ Ì…”% Ì…’” Ì†” Ì†‘” Ì‡’” Ìˆ” Ìˆ–” Ì‰” Ì‰
+” Ì‰”$ Ì‰”Ì– Ì‰ÌC”Ì— Ì‰ÌD–” ÌŠ” ÌŠ
+” ÌŠ”% ÌŠ”Ì— ÌŠÌA”Ì˜ ÌŠÌB—” Ì‹” Ì‹
+” Ì‹” Ì‹”  Ì‹”$ Ì‹”% Ì‹—” ÌŒ” ÌŒ
+” ÌŒ” ÌŒ”  ÌŒ”$ ÌŒ”% ÌŒ’” Ì” Ì‘” Ì’” Ì” Ì‘” Ì’”  Ì‘ ” Ì‘’”  Ì“ ” Ì“˜”  Ì” ” Ì”” Ì”” Ì”” Ì””! Ì”,”# Ì”.”3 Ì”ÌG–” Ì•” Ì•” Ì•
+” Ì•” Ì•” Ì••” Ì–” Ì–” Ì–” Ì–” Ì–˜” Ì—” Ì—” Ì—” Ì—” Ì—” Ì—”ÌA Ì—=”ÌB Ì—>˜” Ì˜” Ì˜” Ì˜” Ì˜” Ì˜”" Ì˜”& Ì˜"”( Ì˜$” Ì™” Ì™” Ì™”! Ì™”# Ì™”3 Ì™-”4 Ì™.”5 Ì™/”ÌS Ì™ÌE”ÌT Ì™ÌF”Ìn Ì™ÌX”Ìo Ì™ÌY”Ìp Ì™ÌZ—” Ìš” Ìš” Ìš” Ìš” Ìš”ÌE Ìš?”ÌF ÌšÌ@‘”	 Ì›’” Ìœ” Ìœ•” Ì” Ì” Ì” Ì” Ì–” Ì” Ì” Ì” Ì” Ì”ÌH ÌÌB”” ÌŸ” ÌŸ” ÌŸ” ÌŸ•” Ì ” Ì ” Ì ” Ì ” Ì –” Ì¡”  Ì¡”! Ì¡”% Ì¡”ÌE Ì¡5”ÌF Ì¡6—” Ì¢” Ì¢” Ì¢”& Ì¢”) Ì¢!”. Ì¢&”/ Ì¢'—” Ì£” Ì£” Ì£”+ Ì£#”. Ì£&”3 Ì£+”4 Ì£,’” Ì¤” Ì¤””	 Ì¥” Ì¥” Ì¥
+” Ì¥—” Ì¦” Ì¦
+” Ì¦” Ì¦” Ì¦” Ì¦” Ì¦”” Ì§”	 Ì§”
+ Ì§” Ì§Ü ” Ì¨” Ì¨” Ì¨” Ì¨	” Ì¨
+” Ì¨” Ì¨” Ì¨” Ì¨”  Ì¨”! Ì¨”9 Ì¨7”: Ì¨8”; Ì¨9”< Ì¨:”= Ì¨;”> Ì¨<”? Ì¨=’”  Ì© ” Ì©ÔrG–§version¤file§sources®sourcesContent¥names¨mappingsÀ‘À‘ÀÜ ¤‘”    ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”  	 ‘”  
+ ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”    ‘”  ! ‘”  " ‘”  # ‘”  $ ‘”  % ‘”  & ‘”  ' ‘”  ( ‘”  ) ‘”  * ‘”  + ‘”  , ‘”  - ‘”  . ‘”  / ‘”  0 ‘”  1 ‘”  2 ‘”  3 ‘”  4 ‘”  5 ‘”  6 ‘”  7 ‘”  8 ‘”  9 ‘”  : ‘”  ; ‘”  < ‘”  = ‘”  > ‘”  ? ‘”  Ì@ ‘”  ÌA ‘”  ÌB ‘”  ÌC ‘”  ÌD ‘”  ÌE ‘”  ÌF ‘”  ÌG ‘”  ÌH ‘”  ÌI ‘”  ÌJ ‘”  ÌK ‘”  ÌL ‘”  ÌM ‘”  ÌN ‘”  ÌO ‘”  ÌP ‘”  ÌQ ‘”  ÌR ‘”  ÌS ‘”  ÌT ‘”  ÌU ‘”  ÌV ‘”  ÌW ‘”  ÌX ‘”  ÌY ‘”  ÌZ ‘”  Ì[ ‘”  Ì\ ‘”  Ì] ‘”  Ì^ ‘”  Ì_ ‘”  Ì` ‘”  Ìa ‘”  Ìb ‘”  Ìc ‘”  Ìd ‘”  Ìe ‘”  Ìf ‘”  Ìg ‘”  Ìh ‘”  Ìi ‘”  Ìj ‘”  Ìk ‘”  Ìl ‘”  Ìm ‘”  Ìn ‘”  Ìo ‘”  Ìp ‘”  Ìq ‘”  Ìr ‘”  Ìs ‘”  Ìt ‘”  Ìu ‘”  Ìv ‘”  Ìw ‘”  Ìx ‘”  Ìy ‘”  Ìz ‘”  Ì{ ‘”  Ì| ‘”  Ì} ‘”  Ì~ ‘”  Ì ‘”  Ì€ ‘”  Ì ‘”  Ì‚ ‘”  Ìƒ ‘”  Ì„ ‘”  Ì… ‘”  Ì† ‘”  Ì‡ ‘”  Ìˆ ‘”  Ì‰ ‘”  ÌŠ ‘”  Ì‹ ‘”  ÌŒ ‘”  Ì ‘”  Ì ‘”  Ì ‘”  Ì ‘”  Ì‘ ‘”  Ì’ ‘”  Ì“ ‘”  Ì” ‘”  Ì• ‘”  Ì– ‘”  Ì— ‘”  Ì˜ ‘”  Ì™ ‘”  Ìš ‘”  Ì› ‘”  Ìœ ‘”  Ì ‘”  Ì ‘”  ÌŸ ‘”  Ì  ‘”  Ì¡ ‘”  Ì¢ ‘”  Ì£ ÔrH’§missing¦pluginÃ¦genAbcÂÔ  ÔrI”²dynamicImportCache¹exportAllDeclarationCache»exportNamedDeclarationCache«importCache•ÔrJ–¤type¥start£end«declarationªspecifiers¦source¶ExportNamedDeclarationÍÍjÔrK™¤type¥start£end¢idªexpression©generator¥async¦params¤body³FunctionDeclarationÍÍjÔrL”¤type¥start£end¤nameªIdentifierÍ"Í0®listTouchEventÂÂÂ’LªIdentifierÍ1Í5¤thatLªIdentifierÍ7Í<¥eventÔrM”¤type¥start£end¤body®BlockStatementÍ>Íj‘ÔrN•¤type¥start£end¬discriminant¥cases¯SwitchStatementÍEÍgÔrO—¤type¥start£end¦object¨property¨computed¨optional°MemberExpressionÍMÍWLªIdentifierÍMÍR¥eventLªIdentifierÍSÍW¤typeÂÂ•ÔrP•¤type¥start£endªconsequent¤testªSwitchCaseÍdÍ“ÔrQ”¤type¥start£endªexpression³ExpressionStatementÍ¡ÍÁÔrR–¤type¥start£end¨operator¤left¥right´AssignmentExpressionÍ¡ÍÀ¡=O°MemberExpressionÍ¡Í«LªIdentifierÍ¡Í¥¤thatLªIdentifierÍ¦Í«¥downYÂÂO°MemberExpressionÍ®ÍÀO°MemberExpressionÍ®Í¾O°MemberExpressionÍ®Í»LªIdentifierÍ®Í³¥eventLªIdentifierÍ´Í»§touchesÂÂÔrS•¤type¥start£end¥value£raw§LiteralÍ¼Í½ ¡0ÃÂLªIdentifierÍ¿ÍÀ¡yÂÂQ³ExpressionStatementÍÏÍóR´AssignmentExpressionÍÏÍò¡=O°MemberExpressionÍÏÍİLªIdentifierÍÏÍÓ¤thatLªIdentifierÍÔÍİ©lastMoveYÂÂO°MemberExpressionÍàÍòO°MemberExpressionÍàÍğO°MemberExpressionÍàÍíLªIdentifierÍàÍå¥eventLªIdentifierÍæÍí§touchesÂÂS§LiteralÍîÍï ¡0ÃÂLªIdentifierÍñÍò¡yÂÂÔrT”¤type¥start£end¥label®BreakStatementÍÍÀO°MemberExpressionÍiÍwLªIdentifierÍiÍr©TouchTypeLªIdentifierÍsÍw¤DownÂÂPªSwitchCaseÍÍ •ÔrU–¤type¥start£end¤testªconsequent©alternate«IfStatementÍPÍ¸ÔrV–¤type¥start£end¤left¨operator¥right±LogicalExpressionÍTÍV°BinaryExpressionÍUÍoO°MemberExpressionÍUÍfLªIdentifierÍUÍY¤thatLªIdentifierÍZÍf¬isRefreshingÂÂ£===S§LiteralÍkÍoÃ¤true¢||V°BinaryExpressionÍuÍŒO°MemberExpressionÍuÍƒLªIdentifierÍuÍy¤thatLªIdentifierÍzÍƒ©isLoadingÂÂ£===S§LiteralÍˆÍŒÃ¤trueM®BlockStatementÍÍ¸‘ÔrW”¤type¥start£end¨argument¯ReturnStatementÍ¢Í©ÀÀÔrX•¤type¥start£end¬declarations¤kind³VariableDeclarationÍÜÍ‘ÔrY•¤type¥start£end¢id¤init²VariableDeclaratorÍàÍLªIdentifierÍàÍêªisDownPullV°BinaryExpressionÍíÍV°BinaryExpressionÍíÍO°MemberExpressionÍíÍÿO°MemberExpressionÍíÍıO°MemberExpressionÍíÍúLªIdentifierÍíÍò¥eventLªIdentifierÍóÍú§touchesÂÂS§LiteralÍûÍü ¡0ÃÂLªIdentifierÍşÍÿ¡yÂÂ¡-O°MemberExpressionÍÍLªIdentifierÍÍ¤thatLªIdentifierÍÍ©lastMoveYÂÂ¡>S§LiteralÍÍ ¡0£letU«IfStatementÍ#ÍZV±LogicalExpressionÍ'ÍŠV±LogicalExpressionÍ(ÍgV°BinaryExpressionÍ)Í<LªIdentifierÍ)Í3ªisDownPull£===S§LiteralÍ8Í<Ã¤true¢||V°BinaryExpressionÍBÍfO°MemberExpressionÍBÍ]LªIdentifierÍBÍF¤thatLªIdentifierÍGÍ]¶isPullRefreshOperationÂÂ£===S§LiteralÍbÍfÃ¤true¢&&V°BinaryExpressionÍmÍ‰O°MemberExpressionÍmÍLªIdentifierÍmÍq¤thatLªIdentifierÍrÍ­isCanLoadMoreÂÂ£===S§LiteralÍ„Í‰Â¥falseM®BlockStatementÍŒÍê‘Q³ExpressionStatementÍ¹ÍÛÔrZ–¤type¥start£end¦callee©arguments¨optional®CallExpressionÍ¹ÍÚLªIdentifierÍ¹ÍÍ´touchMovePullRefresh’LªIdentifierÍÎÍÒ¤thatLªIdentifierÍÔÍÙ¥eventÂM®BlockStatementÍıÍZ‘Q³ExpressionStatementÍ,ÍKZ®CallExpressionÍ,ÍJLªIdentifierÍ,Í=±touchMoveLoadMore’LªIdentifierÍ>ÍB¤thatLªIdentifierÍDÍI¥eventÂQ³ExpressionStatementÍhÍŒR´AssignmentExpressionÍhÍ‹¡=O°MemberExpressionÍhÍvLªIdentifierÍhÍl¤thatLªIdentifierÍmÍv©lastMoveYÂÂO°MemberExpressionÍyÍ‹O°MemberExpressionÍyÍ‰O°MemberExpressionÍyÍ†LªIdentifierÍyÍ~¥eventLªIdentifierÍÍ†§touchesÂÂS§LiteralÍ‡Íˆ ¡0ÃÂLªIdentifierÍŠÍ‹¡yÂÂT®BreakStatementÍšÍ ÀO°MemberExpressionÍÍ$LªIdentifierÍÍ©TouchTypeLªIdentifierÍ Í$¤MoveÂÂPªSwitchCaseÍªÍÔ‘T®BreakStatementÍÎÍÔÀO°MemberExpressionÍ¯Í¿LªIdentifierÍ¯Í¸©TouchTypeLªIdentifierÍ¹Í¿¦CancelÂÂPªSwitchCaseÍŞÍ:“U«IfStatementÍşÍfV±LogicalExpressionÍÍ;V°BinaryExpressionÍÍO°MemberExpressionÍÍLªIdentifierÍÍ¤thatLªIdentifierÍÍ¬isRefreshingÂÂ£===S§LiteralÍÍÃ¤true¢||V°BinaryExpressionÍ#Í:O°MemberExpressionÍ#Í1LªIdentifierÍ#Í'¤thatLªIdentifierÍ(Í1©isLoadingÂÂ£===S§LiteralÍ6Í:Ã¤trueM®BlockStatementÍ=Íf‘W¯ReturnStatementÍPÍWÀÀU«IfStatementÍtÍ&V°BinaryExpressionÍyÍO°MemberExpressionÍyÍ”LªIdentifierÍyÍ}¤thatLªIdentifierÍ~Í”¶isPullRefreshOperationÂÂ£===S§LiteralÍ™ÍÃ¤trueM®BlockStatementÍ ÍÛ‘Q³ExpressionStatementÍ³ÍÌZ®CallExpressionÍ³ÍËLªIdentifierÍ³ÍÅ²touchUpPullRefresh‘LªIdentifierÍÆÍÊ¤thatÂM®BlockStatementÍîÍ&‘Q³ExpressionStatementÍÍZ®CallExpressionÍÍLªIdentifierÍÍ¯touchUpLoadMore‘LªIdentifierÍÍ¤thatÂT®BreakStatementÍ4Í:ÀO°MemberExpressionÍãÍïLªIdentifierÍãÍì©TouchTypeLªIdentifierÍíÍï¢UpÂÂPªSwitchCaseÍDÍ`‘T®BreakStatementÍZÍ`ÀÀÀJ¶ExportNamedDeclarationÍvÍ	?K³FunctionDeclarationÍ}Í	?LªIdentifierÍ†Íš´touchMovePullRefreshÂÂÂ’LªIdentifierÍ›ÍŸ¤thatLªIdentifierÍ¡Í¦¥eventM®BlockStatementÍ¨Í	?‘U«IfStatementÍ¯Í	<V°BinaryExpressionÍ³ÍÈO°MemberExpressionÍ³ÍÂLªIdentifierÍ³Í·¤thatLªIdentifierÍ¸ÍÂªstartIndexÂÂ£===S§LiteralÍÇÍÈ ¡0M®BlockStatementÍÊÍ	<•Q³ExpressionStatementÍÕÍøR´AssignmentExpressionÍÕÍ÷¡=O°MemberExpressionÍÕÍğLªIdentifierÍÕÍÙ¤thatLªIdentifierÍÚÍğ¶isPullRefreshOperationÂÂS§LiteralÍóÍ÷Ã¤trueX³VariableDeclarationÍÍ;‘Y²VariableDeclaratorÍÍ:LªIdentifierÍÍ¦heightZ®CallExpressionÍÍ:O°MemberExpressionÍÍLªIdentifierÍÍ©uiContextLªIdentifierÍÍ¥vp2pxÂÂ‘O°MemberExpressionÍÍ9LªIdentifierÍÍ#¤thatLªIdentifierÍ$Í9µpullDownRefreshHeightÂÂÂ£letQ³ExpressionStatementÍEÍtR´AssignmentExpressionÍEÍs¡=O°MemberExpressionÍEÍQLªIdentifierÍEÍI¤thatLªIdentifierÍJÍQ§offsetYÂÂV°BinaryExpressionÍTÍsO°MemberExpressionÍTÍfO°MemberExpressionÍTÍdO°MemberExpressionÍTÍaLªIdentifierÍTÍY¥eventLªIdentifierÍZÍa§touchesÂÂS§LiteralÍbÍc ¡0ÃÂLªIdentifierÍeÍf¡yÂÂ¡-O°MemberExpressionÍiÍsLªIdentifierÍiÍm¤thatLªIdentifierÍnÍs¥downYÂÂU«IfStatementÍÍ¸V°BinaryExpressionÍ¡Í·O°MemberExpressionÍ¡Í­LªIdentifierÍ¡Í¥¤thatLªIdentifierÍ¦Í­§offsetYÂÂ¢>=LªIdentifierÍ±Í·¦heightM®BlockStatementÍ¹ÍY’Q³ExpressionStatementÍÈÍıZ®CallExpressionÍÈÍüLªIdentifierÍÈÍØ°pullRefreshState’LªIdentifierÍÙÍİ¤thatS§LiteralÍßÍà¡1ÂQ³ExpressionStatementÍÍNR´AssignmentExpressionÍÍM¡=O°MemberExpressionÍÍLªIdentifierÍÍ¤thatLªIdentifierÍÍ§offsetYÂÂV°BinaryExpressionÍÍMLªIdentifierÍÍ ¦height¡+V°BinaryExpressionÍ#ÍMO°MemberExpressionÍ#Í/LªIdentifierÍ#Í'¤thatLªIdentifierÍ(Í/§offsetYÂÂ¡*O°MemberExpressionÍ2ÍMLªIdentifierÍ2Í7¥ConstLªIdentifierÍ8ÍMµY_OFF_SET_COEFFICIENTÂÂM®BlockStatementÍhÍ¸‘Q³ExpressionStatementÍwÍ­Z®CallExpressionÍwÍ¬LªIdentifierÍwÍ‡°pullRefreshState’LªIdentifierÍˆÍŒ¤thatS§LiteralÍÍ ¡0ÂU«IfStatementÍÂÍ	5V°BinaryExpressionÍÆÍÖO°MemberExpressionÍÆÍÒLªIdentifierÍÆÍÊ¤thatLªIdentifierÍËÍÒ§offsetYÂÂ¡<S§LiteralÍÕÍÖ ¡0M®BlockStatementÍØÍ	5’Q³ExpressionStatementÍçÍøR´AssignmentExpressionÍçÍ÷¡=O°MemberExpressionÍçÍóLªIdentifierÍçÍë¤thatLªIdentifierÍìÍó§offsetYÂÂS§LiteralÍöÍ÷ ¡0Q³ExpressionStatementÍ	Í	*R´AssignmentExpressionÍ	Í	)¡=O°MemberExpressionÍ	Í	!LªIdentifierÍ	Í	
+¤thatLªIdentifierÍ	Í	!¶isPullRefreshOperationÂÂS§LiteralÍ	$Í	)Â¥falseÀÀÀJ¶ExportNamedDeclarationÍ	RÍUK³FunctionDeclarationÍ	YÍULªIdentifierÍ	bÍ	t²touchUpPullRefreshÂÂÂ‘LªIdentifierÍ	uÍ	y¤thatM®BlockStatementÍ	{ÍU‘U«IfStatementÍ	‚ÍRV°BinaryExpressionÍ	†Í	 O°MemberExpressionÍ	†Í	—LªIdentifierÍ	†Í	Š¤thatLªIdentifierÍ	‹Í	—¬isCanRefreshÂÂ£===S§LiteralÍ	œÍ	 Ã¤trueM®BlockStatementÍ	¢Í”Q³ExpressionStatementÍ	­Í	èR´AssignmentExpressionÍ	­Í	ç¡=O°MemberExpressionÍ	­Í	¹LªIdentifierÍ	­Í	±¤thatLªIdentifierÍ	²Í	¹§offsetYÂÂZ®CallExpressionÍ	¼Í	çO°MemberExpressionÍ	¼Í	ËLªIdentifierÍ	¼Í	Å©uiContextLªIdentifierÍ	ÆÍ	Ë¥vp2pxÂÂ‘O°MemberExpressionÍ	ÌÍ	æLªIdentifierÍ	ÌÍ	Ğ¤thatLªIdentifierÍ	ÑÍ	æµpullDownRefreshHeightÂÂÂQ³ExpressionStatementÍ	òÍ
+*Z®CallExpressionÍ	òÍ
+)LªIdentifierÍ	òÍ
+°pullRefreshState’LªIdentifierÍ
+Í
+¤thatS§LiteralÍ
+	Í
+
+¡2ÂQ³ExpressionStatementÍ
+4Í
+IR´AssignmentExpressionÍ
+4Í
+H¡=O°MemberExpressionÍ
+4Í
+DLªIdentifierÍ
+4Í
+8¤thatLªIdentifierÍ
+9Í
+D«currentPageÂÂS§LiteralÍ
+GÍ
+H¡1Q³ExpressionStatementÍ
+SÍZ®CallExpressionÍ
+SÍLªIdentifierÍ
+SÍ
+]ªsetTimeout’K·ArrowFunctionExpressionÍ
+^Í ÀÂÂÂM®BlockStatementÍ
+dÍ ’X³VariableDeclarationÍ
+sÍ
+ƒ‘Y²VariableDeclaratorÍ
+wÍ
+‚LªIdentifierÍ
+wÍ
+{¤selfLªIdentifierÍ
+~Í
+‚¤that£letQ³ExpressionStatementÍ
+©ÍõZ®CallExpressionÍ
+©ÍôO°MemberExpressionÍ
+©ÍcZ®CallExpressionÍ
+©Í]O°MemberExpressionÍ
+©Í
+ıZ®CallExpressionÍ
+©Í
+øO°MemberExpressionÍ
+©Í
+ÂLªIdentifierÍ
+©Í
+¶­NewsViewModelLªIdentifierÍ
+·Í
+Â«getNewsListÂÂ“O°MemberExpressionÍ
+ÃÍ
+ÓLªIdentifierÍ
+ÃÍ
+Ç¤thatLªIdentifierÍ
+ÈÍ
+Ó«currentPageÂÂO°MemberExpressionÍ
+ÕÍ
+âLªIdentifierÍ
+ÕÍ
+Ù¤thatLªIdentifierÍ
+ÚÍ
+â¨pageSizeÂÂO°MemberExpressionÍ
+äÍ
+÷LªIdentifierÍ
+äÍ
+é¥ConstLªIdentifierÍ
+êÍ
+÷­GET_NEWS_LISTÂÂÂLªIdentifierÍ
+ùÍ
+ı¤thenÂÂ‘K·ArrowFunctionExpressionÍ
+şÍ\ÀÂÂÂ‘LªIdentifierÍ
+ÿÍ¤dataM®BlockStatementÍÍ\“U«IfStatementÍÍûV°BinaryExpressionÍÍ<O°MemberExpressionÍÍ*LªIdentifierÍÍ#¤dataLªIdentifierÍ$Í*¦lengthÂÂ£===O°MemberExpressionÍ/Í<LªIdentifierÍ/Í3¤thatLªIdentifierÍ4Í<¨pageSizeÂÂM®BlockStatementÍ>Í¥’Q³ExpressionStatementÍUÍiR´AssignmentExpressionÍUÍh¡=O°MemberExpressionÍUÍaLªIdentifierÍUÍY¤selfLªIdentifierÍZÍa§hasMoreÂÂS§LiteralÍdÍhÃ¤trueQ³ExpressionStatementÍÍ’Ôr[–¤type¥start£end¨operator¦prefix¨argument°UpdateExpressionÍÍ‘¢++ÂO°MemberExpressionÍÍLªIdentifierÍÍƒ¤selfLªIdentifierÍ„Í«currentPageÂÂM®BlockStatementÍ¼Íû‘Q³ExpressionStatementÍÓÍèR´AssignmentExpressionÍÓÍç¡=O°MemberExpressionÍÓÍßLªIdentifierÍÓÍ×¤selfLªIdentifierÍØÍß§hasMoreÂÂS§LiteralÍâÍçÂ¥falseQ³ExpressionStatementÍÍ"R´AssignmentExpressionÍÍ!¡=O°MemberExpressionÍÍLªIdentifierÍÍ¤selfLªIdentifierÍÍ¨newsDataÂÂLªIdentifierÍÍ!¤dataQ³ExpressionStatementÍ4ÍMZ®CallExpressionÍ4ÍLLªIdentifierÍ4Í@¬closeRefresh’LªIdentifierÍAÍE¤selfS§LiteralÍGÍKÃ¤trueÂÂLªIdentifierÍ^Íc¥catchÂÂ‘K·ArrowFunctionExpressionÍdÍóÀÂÂÂ‘LªIdentifierÍeÍh£errM®BlockStatementÍmÍó’Q³ExpressionStatementÍ€Í¸Z®CallExpressionÍ€Í·O°MemberExpressionÍ€Í¥Z®CallExpressionÍ€Í›O°MemberExpressionÍ€Í™LªIdentifierÍ€Í‰©uiContextLªIdentifierÍŠÍ™¯getPromptActionÂÂÂLªIdentifierÍœÍ¥©showToastÂÂ‘Ôr\”¤type¥start£endªproperties°ObjectExpressionÍ¦Í¶‘Ôr]™¤type¥start£end¦method©shorthand¨computed£key¥value¤kind¨PropertyÍ¨Í´ÂÂÂLªIdentifierÍ¨Í¯§messageLªIdentifierÍ±Í´£err¤initÂQ³ExpressionStatementÍÊÍäZ®CallExpressionÍÊÍãLªIdentifierÍÊÍÖ¬closeRefresh’LªIdentifierÍ×ÍÛ¤selfS§LiteralÍİÍâÂ¥falseÂÂO°MemberExpressionÍÍLªIdentifierÍÍ¥ConstLªIdentifierÍÍªDELAY_TIMEÂÂÂM®BlockStatementÍ&ÍR‘Q³ExpressionStatementÍ1ÍKZ®CallExpressionÍ1ÍJLªIdentifierÍ1Í=¬closeRefresh’LªIdentifierÍ>ÍB¤thatS§LiteralÍDÍIÂ¥falseÂÀJ¶ExportNamedDeclarationÍcÍK³FunctionDeclarationÍjÍLªIdentifierÍsÍƒ°pullRefreshStateÂÂÂ’LªIdentifierÍ„Íˆ¤thatLªIdentifierÍŠÍ¥stateM®BlockStatementÍ‘Í‘N¯SwitchStatementÍ˜Í|LªIdentifierÍ Í¥¥state–PªSwitchCaseÍ²Í¬–Q³ExpressionStatementÍ÷Í‚R´AssignmentExpressionÍ÷Í¡=O°MemberExpressionÍ÷ÍLªIdentifierÍ÷Íû¤thatLªIdentifierÍüÍ³pullDownRefreshTextÂÂ\°ObjectExpressionÍÍ•]¨PropertyÍÍ"ÂÂÂS§LiteralÍÍ¢id¤"id"S§LiteralÍÍ"Î  	¨16777225¤init]¨PropertyÍ$Í1ÂÂÂS§LiteralÍ$Í*¤type¦"type"S§LiteralÍ,Í1Í'¥10003¤init]¨PropertyÍ3Í=ÂÂÂLªIdentifierÍ3Í9¦paramsÔr^”¤type¥start£end¨elements¯ArrayExpressionÍ;Í=¤init]¨PropertyÍ?ÍhÂÂÂS§LiteralÍ?ÍKªbundleName¬"bundleName"S§LiteralÍMÍh¹com.example.newsdataarkts»"com.example.newsdataarkts"¤init]¨PropertyÍjÍÂÂÂS§LiteralÍjÍvªmoduleName¬"moduleName"S§LiteralÍxÍ¥entry§"entry"¤initQ³ExpressionStatementÍÍR´AssignmentExpressionÍÍ¡=O°MemberExpressionÍÍ©LªIdentifierÍÍ”¤thatLªIdentifierÍ•Í©´pullDownRefreshImageÂÂ\°ObjectExpressionÍ¬Í•]¨PropertyÍ®Í¼ÂÂÂS§LiteralÍ®Í²¢id¤"id"S§LiteralÍ´Í¼Î  ¨16777241¤init]¨PropertyÍ¾ÍËÂÂÂS§LiteralÍ¾ÍÄ¤type¦"type"S§LiteralÍÆÍËÍN ¥20000¤init]¨PropertyÍÍÍ×ÂÂÂLªIdentifierÍÍÍÓ¦params^¯ArrayExpressionÍÕÍ×¤init]¨PropertyÍÙÍÂÂÂS§LiteralÍÙÍåªbundleName¬"bundleName"S§LiteralÍçÍ¹com.example.newsdataarkts»"com.example.newsdataarkts"¤init]¨PropertyÍÍÂÂÂS§LiteralÍÍªmoduleName¬"moduleName"S§LiteralÍÍ¥entry§"entry"¤initQ³ExpressionStatementÍ*ÍDR´AssignmentExpressionÍ*ÍC¡=O°MemberExpressionÍ*Í;LªIdentifierÍ*Í.¤thatLªIdentifierÍ/Í;¬isCanRefreshÂÂS§LiteralÍ>ÍCÂ¥falseQ³ExpressionStatementÍRÍlR´AssignmentExpressionÍRÍk¡=O°MemberExpressionÍRÍcLªIdentifierÍRÍV¤thatLªIdentifierÍWÍc¬isRefreshingÂÂS§LiteralÍfÍkÂ¥falseQ³ExpressionStatementÍzÍ˜R´AssignmentExpressionÍzÍ—¡=O°MemberExpressionÍzÍLªIdentifierÍzÍ~¤thatLªIdentifierÍÍ±isVisiblePullDownÂÂS§LiteralÍ“Í—Ã¤trueT®BreakStatementÍ¦Í¬ÀS§LiteralÍ·Í¸ ¡0PªSwitchCaseÍ¶Í‚•Q³ExpressionStatementÍúÍ…R´AssignmentExpressionÍúÍ„¡=O°MemberExpressionÍúÍLªIdentifierÍúÍş¤thatLªIdentifierÍÿÍ³pullDownRefreshTextÂÂ\°ObjectExpressionÍÍ„•]¨PropertyÍÍ%ÂÂÂS§LiteralÍÍ¢id¤"id"S§LiteralÍÍ%Î  ¨16777230¤init]¨PropertyÍ'Í4ÂÂÂS§LiteralÍ'Í-¤type¦"type"S§LiteralÍ/Í4Í'¥10003¤init]¨PropertyÍ6Í@ÂÂÂLªIdentifierÍ6Í<¦params^¯ArrayExpressionÍ>Í@¤init]¨PropertyÍBÍkÂÂÂS§LiteralÍBÍNªbundleName¬"bundleName"S§LiteralÍPÍk¹com.example.newsdataarkts»"com.example.newsdataarkts"¤init]¨PropertyÍmÍ‚ÂÂÂS§LiteralÍmÍyªmoduleName¬"moduleName"S§LiteralÍ{Í‚¥entry§"entry"¤initQ³ExpressionStatementÍ“ÍR´AssignmentExpressionÍ“Í¡=O°MemberExpressionÍ“Í¬LªIdentifierÍ“Í—¤thatLªIdentifierÍ˜Í¬´pullDownRefreshImageÂÂ\°ObjectExpressionÍ¯Í•]¨PropertyÍ±Í¿ÂÂÂS§LiteralÍ±Íµ¢id¤"id"S§LiteralÍ·Í¿Î  ¨16777243¤init]¨PropertyÍÁÍÎÂÂÂS§LiteralÍÁÍÇ¤type¦"type"S§LiteralÍÉÍÎÍN ¥20000¤init]¨PropertyÍĞÍÚÂÂÂLªIdentifierÍĞÍÖ¦params^¯ArrayExpressionÍØÍÚ¤init]¨PropertyÍÜÍÂÂÂS§LiteralÍÜÍèªbundleName¬"bundleName"S§LiteralÍêÍ¹com.example.newsdataarkts»"com.example.newsdataarkts"¤init]¨PropertyÍÍÂÂÂS§LiteralÍÍªmoduleName¬"moduleName"S§LiteralÍÍ¥entry§"entry"¤initQ³ExpressionStatementÍ-ÍFR´AssignmentExpressionÍ-ÍE¡=O°MemberExpressionÍ-Í>LªIdentifierÍ-Í1¤thatLªIdentifierÍ2Í>¬isCanRefreshÂÂS§LiteralÍAÍEÃ¤trueQ³ExpressionStatementÍTÍnR´AssignmentExpressionÍTÍm¡=O°MemberExpressionÍTÍeLªIdentifierÍTÍX¤thatLªIdentifierÍYÍe¬isRefreshingÂÂS§LiteralÍhÍmÂ¥falseT®BreakStatementÍ|Í‚ÀS§LiteralÍ»Í¼¡1PªSwitchCaseÍŒÍ¤–Q³ExpressionStatementÍÔÍR´AssignmentExpressionÍÔÍ¡=O°MemberExpressionÍÔÍàLªIdentifierÍÔÍØ¤thatLªIdentifierÍÙÍà§offsetYÂÂZ®CallExpressionÍãÍO°MemberExpressionÍãÍòLªIdentifierÍãÍì©uiContextLªIdentifierÍíÍò¥vp2pxÂÂ‘O°MemberExpressionÍóÍLªIdentifierÍóÍ÷¤thatLªIdentifierÍøÍµpullDownRefreshHeightÂÂÂQ³ExpressionStatementÍÍ¨R´AssignmentExpressionÍÍ§¡=O°MemberExpressionÍÍ5LªIdentifierÍÍ!¤thatLªIdentifierÍ"Í5³pullDownRefreshTextÂÂ\°ObjectExpressionÍ8Í§•]¨PropertyÍ:ÍHÂÂÂS§LiteralÍ:Í>¢id¤"id"S§LiteralÍ@ÍHÎ  ¨16777229¤init]¨PropertyÍJÍWÂÂÂS§LiteralÍJÍP¤type¦"type"S§LiteralÍRÍWÍ'¥10003¤init]¨PropertyÍYÍcÂÂÂLªIdentifierÍYÍ_¦params^¯ArrayExpressionÍaÍc¤init]¨PropertyÍeÍÂÂÂS§LiteralÍeÍqªbundleName¬"bundleName"S§LiteralÍsÍ¹com.example.newsdataarkts»"com.example.newsdataarkts"¤init]¨PropertyÍÍ¥ÂÂÂS§LiteralÍÍœªmoduleName¬"moduleName"S§LiteralÍÍ¥¥entry§"entry"¤initQ³ExpressionStatementÍ¶ÍBR´AssignmentExpressionÍ¶ÍA¡=O°MemberExpressionÍ¶ÍÏLªIdentifierÍ¶Íº¤thatLªIdentifierÍ»ÍÏ´pullDownRefreshImageÂÂ\°ObjectExpressionÍÒÍA•]¨PropertyÍÔÍâÂÂÂS§LiteralÍÔÍØ¢id¤"id"S§LiteralÍÚÍâÎ  ¨16777242¤init]¨PropertyÍäÍñÂÂÂS§LiteralÍäÍê¤type¦"type"S§LiteralÍìÍñÍN ¥20000¤init]¨PropertyÍóÍıÂÂÂLªIdentifierÍóÍù¦params^¯ArrayExpressionÍûÍı¤init]¨PropertyÍÿÍ(ÂÂÂS§LiteralÍÿÍªbundleName¬"bundleName"S§LiteralÍÍ(¹com.example.newsdataarkts»"com.example.newsdataarkts"¤init]¨PropertyÍ*Í?ÂÂÂS§LiteralÍ*Í6ªmoduleName¬"moduleName"S§LiteralÍ8Í?¥entry§"entry"¤initQ³ExpressionStatementÍPÍiR´AssignmentExpressionÍPÍh¡=O°MemberExpressionÍPÍaLªIdentifierÍPÍT¤thatLªIdentifierÍUÍa¬isCanRefreshÂÂS§LiteralÍdÍhÃ¤trueQ³ExpressionStatementÍwÍR´AssignmentExpressionÍwÍ¡=O°MemberExpressionÍwÍˆLªIdentifierÍwÍ{¤thatLªIdentifierÍ|Íˆ¬isRefreshingÂÂS§LiteralÍ‹ÍÃ¤trueT®BreakStatementÍÍ¤ÀS§LiteralÍ‘Í’¡2PªSwitchCaseÍ®Í{•Q³ExpressionStatementÍôÍR´AssignmentExpressionÍôÍ~¡=O°MemberExpressionÍôÍLªIdentifierÍôÍø¤thatLªIdentifierÍùÍ³pullDownRefreshTextÂÂ\°ObjectExpressionÍÍ~•]¨PropertyÍÍÂÂÂS§LiteralÍÍ¢id¤"id"S§LiteralÍÍÎ  ¨16777228¤init]¨PropertyÍ!Í.ÂÂÂS§LiteralÍ!Í'¤type¦"type"S§LiteralÍ)Í.Í'¥10003¤init]¨PropertyÍ0Í:ÂÂÂLªIdentifierÍ0Í6¦params^¯ArrayExpressionÍ8Í:¤init]¨PropertyÍ<ÍeÂÂÂS§LiteralÍ<ÍHªbundleName¬"bundleName"S§LiteralÍJÍe¹com.example.newsdataarkts»"com.example.newsdataarkts"¤init]¨PropertyÍgÍ|ÂÂÂS§LiteralÍgÍsªmoduleName¬"moduleName"S§LiteralÍuÍ|¥entry§"entry"¤initQ³ExpressionStatementÍÍR´AssignmentExpressionÍÍ¡=O°MemberExpressionÍÍ¦LªIdentifierÍÍ‘¤thatLªIdentifierÍ’Í¦´pullDownRefreshImageÂÂ\°ObjectExpressionÍ©Í•]¨PropertyÍ«Í¹ÂÂÂS§LiteralÍ«Í¯¢id¤"id"S§LiteralÍ±Í¹Î  ¨16777244¤init]¨PropertyÍ»ÍÈÂÂÂS§LiteralÍ»ÍÁ¤type¦"type"S§LiteralÍÃÍÈÍN ¥20000¤init]¨PropertyÍÊÍÔÂÂÂLªIdentifierÍÊÍĞ¦params^¯ArrayExpressionÍÒÍÔ¤init]¨PropertyÍÖÍÿÂÂÂS§LiteralÍÖÍâªbundleName¬"bundleName"S§LiteralÍäÍÿ¹com.example.newsdataarkts»"com.example.newsdataarkts"¤init]¨PropertyÍÍÂÂÂS§LiteralÍÍªmoduleName¬"moduleName"S§LiteralÍÍ¥entry§"entry"¤initQ³ExpressionStatementÍ'Í@R´AssignmentExpressionÍ'Í?¡=O°MemberExpressionÍ'Í8LªIdentifierÍ'Í+¤thatLªIdentifierÍ,Í8¬isCanRefreshÂÂS§LiteralÍ;Í?Ã¤trueQ³ExpressionStatementÍNÍgR´AssignmentExpressionÍNÍf¡=O°MemberExpressionÍNÍ_LªIdentifierÍNÍR¤thatLªIdentifierÍSÍ_¬isRefreshingÂÂS§LiteralÍbÍfÃ¤trueT®BreakStatementÍuÍ{ÀS§LiteralÍ³Í´¡3PªSwitchCaseÍ…ÍO•Q³ExpressionStatementÍÈÍSR´AssignmentExpressionÍÈÍR¡=O°MemberExpressionÍÈÍàLªIdentifierÍÈÍÌ¤thatLªIdentifierÍÍÍà³pullDownRefreshTextÂÂ\°ObjectExpressionÍãÍR•]¨PropertyÍåÍóÂÂÂS§LiteralÍåÍé¢id¤"id"S§LiteralÍëÍóÎ  ¨16777227¤init]¨PropertyÍõÍÂÂÂS§LiteralÍõÍû¤type¦"type"S§LiteralÍıÍÍ'¥10003¤init]¨PropertyÍÍÂÂÂLªIdentifierÍÍ
+¦params^¯ArrayExpressionÍÍ¤init]¨PropertyÍÍ9ÂÂÂS§LiteralÍÍªbundleName¬"bundleName"S§LiteralÍÍ9¹com.example.newsdataarkts»"com.example.newsdataarkts"¤init]¨PropertyÍ;ÍPÂÂÂS§LiteralÍ;ÍGªmoduleName¬"moduleName"S§LiteralÍIÍP¥entry§"entry"¤initQ³ExpressionStatementÍaÍíR´AssignmentExpressionÍaÍì¡=O°MemberExpressionÍaÍzLªIdentifierÍaÍe¤thatLªIdentifierÍfÍz´pullDownRefreshImageÂÂ\°ObjectExpressionÍ}Íì•]¨PropertyÍÍÂÂÂS§LiteralÍÍƒ¢id¤"id"S§LiteralÍ…ÍÎ  ¨16777240¤init]¨PropertyÍÍœÂÂÂS§LiteralÍÍ•¤type¦"type"S§LiteralÍ—ÍœÍN ¥20000¤init]¨PropertyÍÍ¨ÂÂÂLªIdentifierÍÍ¤¦params^¯ArrayExpressionÍ¦Í¨¤init]¨PropertyÍªÍÓÂÂÂS§LiteralÍªÍ¶ªbundleName¬"bundleName"S§LiteralÍ¸ÍÓ¹com.example.newsdataarkts»"com.example.newsdataarkts"¤init]¨PropertyÍÕÍêÂÂÂS§LiteralÍÕÍáªmoduleName¬"moduleName"S§LiteralÍãÍê¥entry§"entry"¤initQ³ExpressionStatementÍûÍR´AssignmentExpressionÍûÍ¡=O°MemberExpressionÍûÍLªIdentifierÍûÍÿ¤thatLªIdentifierÍ Í¬isCanRefreshÂÂS§LiteralÍÍÃ¤trueQ³ExpressionStatementÍ"Í;R´AssignmentExpressionÍ"Í:¡=O°MemberExpressionÍ"Í3LªIdentifierÍ"Í&¤thatLªIdentifierÍ'Í3¬isRefreshingÂÂS§LiteralÍ6Í:Ã¤trueT®BreakStatementÍIÍOÀS§LiteralÍŠÍ‹¡4PªSwitchCaseÍYÍu‘T®BreakStatementÍoÍuÀÀÀJ¶ExportNamedDeclarationÍ‰ÍK³FunctionDeclarationÍÍLªIdentifierÍ™Í¥¬closeRefreshÂÂÂ’LªIdentifierÍ¦Íª¤thatLªIdentifierÍ¬Í¼°isRefreshSuccessM®BlockStatementÍ¾Í’X³VariableDeclarationÍÅÍÕ‘Y²VariableDeclaratorÍÉÍÔLªIdentifierÍÉÍÍ¤selfLªIdentifierÍĞÍÔ¤that£letQ³ExpressionStatementÍÛÍZ®CallExpressionÍÛÍLªIdentifierÍÛÍåªsetTimeout’K·ArrowFunctionExpressionÍæÍßÀÂÂÂM®BlockStatementÍìÍß“X³VariableDeclarationÍ÷Í1‘Y²VariableDeclaratorÍûÍ0LªIdentifierÍûÍ ¥delayO°MemberExpressionÍÍ0LªIdentifierÍÍ¥ConstLªIdentifierÍ	Í0Ù'RefreshConstant_DELAY_PULL_DOWN_REFRESHÂÂ£letU«IfStatementÍ;Í!V°BinaryExpressionÍ?ÍYO°MemberExpressionÍ?ÍPLªIdentifierÍ?ÍC¤selfLªIdentifierÍDÍP¬isCanRefreshÂÂ£===S§LiteralÍUÍYÃ¤trueM®BlockStatementÍ[Í!’Q³ExpressionStatementÍjÍÎZ®CallExpressionÍjÍÍLªIdentifierÍjÍz°pullRefreshState’LªIdentifierÍ{Í¤thatUµConditionalExpressionÍÍ´LªIdentifierÍÍ‘°isRefreshSuccessS§LiteralÍ”Í•¡3S§LiteralÍ³Í´¡4ÂQ³ExpressionStatementÍÜÍR´AssignmentExpressionÍÜÍ¡=LªIdentifierÍÜÍá¥delayO°MemberExpressionÍäÍLªIdentifierÍäÍé¥ConstLªIdentifierÍêÍÙ+RefreshConstant_DELAY_SHRINK_ANIMATION_TIMEÂÂÀQ³ExpressionStatementÍ@ÍØZ®CallExpressionÍ@Í×O°MemberExpressionÍ@ÍSLªIdentifierÍ@ÍI©uiContextLªIdentifierÍJÍS©animateToÂÂ’\°ObjectExpressionÍTÍ£“]¨PropertyÍcÍŸÂÂÂLªIdentifierÍcÍk¨durationO°MemberExpressionÍmÍŸLªIdentifierÍmÍr¥ConstLªIdentifierÍsÍŸÙ,RefreshConstant_CLOSE_PULL_DOWN_REFRESH_TIMEÂÂ¤init]¨PropertyÍ®ÍºÂÂÂLªIdentifierÍ®Í³¥delayLªIdentifierÍµÍº¥delay¤init]¨PropertyÍÉÍ˜ÂÂÂLªIdentifierÍÉÍÑ¨onFinishK·ArrowFunctionExpressionÍÓÍ˜ÀÂÂÂM®BlockStatementÍÙÍ˜“Q³ExpressionStatementÍìÍ"Z®CallExpressionÍìÍ!LªIdentifierÍìÍü°pullRefreshState’LªIdentifierÍıÍ¤thatS§LiteralÍÍ ¡0ÂQ³ExpressionStatementÍ4ÍSR´AssignmentExpressionÍ4ÍR¡=O°MemberExpressionÍ4ÍJLªIdentifierÍ4Í8¤selfLªIdentifierÍ9ÍJ±isVisiblePullDownÂÂS§LiteralÍMÍRÂ¥falseQ³ExpressionStatementÍeÍ‰R´AssignmentExpressionÍeÍˆ¡=O°MemberExpressionÍeÍ€LªIdentifierÍeÍi¤selfLªIdentifierÍjÍ€¶isPullRefreshOperationÂÂS§LiteralÍƒÍˆÂ¥false¤initK·ArrowFunctionExpressionÍ¥ÍÖÀÂÂÂM®BlockStatementÍ«ÍÖ‘Q³ExpressionStatementÍºÍËR´AssignmentExpressionÍºÍÊ¡=O°MemberExpressionÍºÍÆLªIdentifierÍºÍ¾¤selfLªIdentifierÍ¿ÍÆ§offsetYÂÂS§LiteralÍÉÍÊ ¡0ÂUµConditionalExpressionÍáÍO°MemberExpressionÍáÍòLªIdentifierÍáÍå¤selfLªIdentifierÍæÍò¬isCanRefreshÂÂO°MemberExpressionÍõÍLªIdentifierÍõÍú¥ConstLªIdentifierÍûÍ¸DELAY_ANIMATION_DURATIONÂÂS§LiteralÍÍ ¡0ÂÀ“Ôr_•¤type¥start£endªspecifiers¦source±ImportDeclaration ÌF’Ôr`•¤type¥start£end¨imported¥local¯ImportSpecifier	LªIdentifier	±touchMoveLoadMoreLªIdentifier	±touchMoveLoadMore`¯ImportSpecifier+LªIdentifier+¯touchUpLoadMoreLªIdentifier+¯touchUpLoadMoreS§Literal3ÌE°./PullUpLoadMore²'./PullUpLoadMore'_±ImportDeclarationÌHÌ‘`¯ImportSpecifierÌQÌhLªIdentifierÌQÌ_®CommonConstantLªIdentifierÌcÌh¥ConstS§LiteralÌpÌŒº../constant/CommonConstant¼'../constant/CommonConstant'_±ImportDeclarationÌÌÉ‘Ôra”¤type¥start£end¥local¶ImportDefaultSpecifierÌ–Ì£LªIdentifierÌ–Ì£­NewsViewModelS§LiteralÌ©ÌÈ½../../viewmodel/NewsViewModel¿'../../viewmodel/NewsViewModel'
